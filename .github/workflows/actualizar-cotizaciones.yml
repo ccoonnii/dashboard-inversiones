@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Mostrar estado inicial
+      - name: Consultar cotización de SPY
         run: |
-          echo "La tarea automática está configurada."
-          echo "Todavía falta conectar las cotizaciones reales."
+          python -m pip install yfinance
+          python -c "import yfinance as yf; t = yf.Ticker('SPY'); print(t.history(period='5d')[['Close']])"
