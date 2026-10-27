@@ -42,11 +42,26 @@ jobs:
           if historial.empty:
               raise RuntimeError("Yahoo Finance no devolvió precios para SPY")
 
-          precio = float(historial["Close"].dropna().iloc[-1])
-          datos["SPY"] = {
-              "precio": round(precio, 4),
-              "actualizado": datetime.now(timezone.utc).isoformat()
-          }
+          
+precio_ars = float(historial["Close"].dropna().iloc[-1])
+
+cambio = yf.Ticker("ARS=X").history(period="5d")
+if cambio.empty:
+    raise RuntimeError("No se pudo obtener el tipo de cambio USD/ARS")
+
+ars_por_usd = float(cambio["Close"].dropna().iloc[-1])
+if ars_por_usd <= 0:
+    raise RuntimeError("Tipo de cambio no válido")
+
+precio_usd = precio_ars / ars_por_usd
+
+datos["SPY"] = {
+    "precio": round(precio_usd, 4),
+    "precio_ars": round(precio_ars, 2),
+    "tipo_cambio_ars_por_usd": round(ars_por_usd, 2),
+    "actualizado": datetime.now(timezone.utc).isoformat()
+}
+
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
