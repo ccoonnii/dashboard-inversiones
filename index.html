@@ -32,8 +32,8 @@ td{font-size:14px}
 </head>
 <body>
 <main>
-<h1>📈 Mi cartera de inversiones</h1>
-<p class="muted">Seguimiento de inversiones · Objetivo: duplicar el capital</p>
+<h1>📈 Dashbord inversiones</h1>
+<p class="muted">Actualización</p>
 
 <div class="grid">
 <section class="card">
@@ -86,7 +86,7 @@ td{font-size:14px}
 </div>
 <div>
 <div class="label">Valor mostrado por Cocos</div>
-<div class="value">US$ 68,30</div>
+<div class="value" id="spy-valor-cocos">US$ 68,30</div>
 </div>
 <div>
 <div class="label">Rendimiento informado</div>
@@ -134,5 +134,35 @@ document.getElementById("tabla").innerHTML=cartera.map(a=>`
 document.getElementById("avance").textContent=
 "Objetivo: "+usd(objetivo)+". El progreso real se actualizará cuando conectemos y verifiquemos las cotizaciones.";
 </script>
-</body>
+
+
+<script>
+async function actualizarSPY() {
+  try {
+    const respuesta = await fetch("./cotizaciones.json?t=" + Date.now());
+    if (!respuesta.ok) throw new Error("No se pudo leer el archivo");
+
+    const datos = await respuesta.json();
+    const precio = datos.SPY.precio;
+
+    if (typeof precio !== "number" || !Number.isFinite(precio)) {
+      throw new Error("Precio no válido");
+    }
+
+    const elemento = document.getElementById("spy-valor-cocos");
+    if (elemento) {
+      elemento.textContent = "Último cierre: US$ " +
+        precio.toLocaleString("es-AR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+    }
+  } catch (error) {
+    console.error("Error al actualizar SPY:", error);
+  }
+}
+
+actualizarSPY();
+</script>
 </html>
+</body>
