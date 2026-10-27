@@ -38,7 +38,7 @@ jobs:
           except (FileNotFoundError, json.JSONDecodeError):
               pass
 
-          historial = yf.Ticker("SPY").history(period="5d")
+          historial = yf.Ticker("SPY.BA").history(period="5d")
           if historial.empty:
               raise RuntimeError("Yahoo Finance no devolvió precios para SPY")
 
