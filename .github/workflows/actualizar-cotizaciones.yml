@@ -61,11 +61,11 @@ jobs:
                       }
                       print("SPY actualizado")
                   else:
-                      print("SPY o tipo de cambio no válido; se conserva el dato anterior")
+                      print("Precio no válido; se conserva el anterior")
               else:
-                  print("No hay datos recientes de SPY o del tipo de cambio")
+                  print("Sin datos nuevos de SPY; se conserva el anterior")
           except Exception as e:
-              print(f"Error en SPY; se conserva el dato anterior: {e}")
+              print(f"Error SPY; se conserva el anterior: {e}")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
@@ -109,6 +109,7 @@ jobs:
                       precio = fila.get(
                           "c", fila.get("last", fila.get("price"))
                       )
+
                       if precio is not None and float(precio) > 0:
                           encontrados[simbolo] = {
                               "precio": float(precio),
@@ -124,17 +125,17 @@ jobs:
                       datos[simbolo] = encontrados[simbolo]
                       print(f"{simbolo}: actualizado")
                   else:
-                      print(f"{simbolo}: sin cotización nueva; se conserva el dato anterior")
+                      print(f"{simbolo}: sin precio nuevo; se conserva el anterior")
 
           except Exception as e:
-              print(f"Error en Data912; se conservan los datos anteriores: {e}")
+              print(f"Error Data912; se conservan los precios anteriores: {e}")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
               f.write("\n")
           PY
 
-      - name: Actualizar Bitcoin y Ethereum
+      - name: Actualizar Bitcoin y Ethereum desde CoinGecko
         run: |
           python - <<'PY'
           import json
@@ -145,28 +146,38 @@ jobs:
           with open(archivo, encoding="utf-8") as f:
               datos = json.load(f)
 
-          for simbolo in ("BTCUSDT", "ETHUSDT"):
-              url = (
-                  "https://api.binance.com/api/v3/ticker/24hr"
-                  f"?symbol={simbolo}"
-              )
+          url = (
+              "https://api.coingecko.com/api/v3/simple/price"
+              "?ids=bitcoin,ethereum&vs_currencies=usd"
+              "&include_24hr_change=true"
+          )
 
-              try:
-                  req = urllib.request.Request(
-                      url, headers={"User-Agent": "dashboard-inversiones"}
-                  )
-                  with urllib.request.urlopen(req, timeout=20) as r:
-                      cot = json.loads(r.read().decode("utf-8"))
+          req = urllib.request.Request(
+              url,
+              headers={"User-Agent": "dashboard-inversiones"}
+          )
 
-                  datos[simbolo] = {
-                      "precio": float(cot["lastPrice"]),
-                      "variacion_24h_pct": float(cot["priceChangePercent"]),
-                      "actualizado": datetime.now(timezone.utc).isoformat()
-                  }
-                  print(f"{simbolo}: actualizado")
+          with urllib.request.urlopen(req, timeout=25) as r:
+              cotizaciones = json.loads(r.read().decode("utf-8"))
 
-              except Exception as e:
-                  print(f"{simbolo}: error; se conserva el dato anterior: {e}")
+          ahora = datetime.now(timezone.utc).isoformat()
+
+          equivalencias = {
+              "BTCUSDT": "bitcoin",
+              "ETHUSDT": "ethereum"
+          }
+
+          for simbolo, id_moneda in equivalencias.items():
+              moneda = cotizaciones[id_moneda]
+              datos[simbolo] = {
+                  "precio": float(moneda["usd"]),
+                  "variacion_24h_pct": float(
+                      moneda.get("usd_24h_change", 0)
+                  ),
+                  "fuente": "CoinGecko",
+                  "actualizado": ahora
+              }
+              print(f"{simbolo}: actualizado desde CoinGecko")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
