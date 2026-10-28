@@ -3,12 +3,30 @@
     "precio": 13.8566,
     "precio_ars": 21360.0,
     "tipo_cambio_ars_por_usd": 1541.5,
-    "actualizado": "2026-10-28T20:47:08.034468+00:00"
+    "actualizado": "2026-10-28T20:54:18.802818+00:00"
   },
   "BTCUSDT": {
     "error": "Cotización todavía no disponible"
   },
   "ETHUSDT": {
     "error": "Cotización todavía no disponible"
+  },
+  "XPD": {
+    "precio": 4.23,
+    "precio_ars": 4.23,
+    "fuente": "Data912",
+    "actualizado": "2026-10-28T20:54:19.611153+00:00"
+  },
+  "EWZD": {
+    "precio": 17.75,
+    "precio_ars": 17.75,
+    "fuente": "Data912",
+    "actualizado": "2026-10-28T20:54:19.610938+00:00"
+  },
+  "NUD": {
+    "precio": 6.35,
+    "precio_ars": 6.35,
+    "fuente": "Data912",
+    "actualizado": "2026-10-28T20:54:19.611047+00:00"
   }
 }
