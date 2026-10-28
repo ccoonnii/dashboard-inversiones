@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Consultar y guardar SPY
+      - name: Actualizar SPY
         run: |
           python -m pip install yfinance
           python - <<'PY'
@@ -30,47 +30,39 @@ jobs:
           import yfinance as yf
 
           archivo = "cotizaciones.json"
-          datos = {}
-
           try:
-              with open(archivo, "r", encoding="utf-8") as f:
+              with open(archivo, encoding="utf-8") as f:
                   datos = json.load(f)
           except (FileNotFoundError, json.JSONDecodeError):
-              pass
+              datos = {}
 
-          historial = yf.Ticker("SPY.BA").history(period="5d")
-          if historial.empty or historial["Close"].dropna().empty:
-              raise RuntimeError("Yahoo Finance no devolvió precios para SPY.BA")
-
-          precio_ars = float(historial["Close"].dropna().iloc[-1])
-
-          cambio = yf.Ticker("ARS=X").history(period="5d")
-          if cambio.empty or cambio["Close"].dropna().empty:
-              raise RuntimeError("No se pudo obtener el tipo de cambio USD/ARS")
-
-          ars_por_usd = float(cambio["Close"].dropna().iloc[-1])
-          if ars_por_usd <= 0:
-              raise RuntimeError("Tipo de cambio no válido")
-
-          precio_usd = precio_ars / ars_por_usd
-
-          datos["SPY"] = {
-              "precio": round(precio_usd, 4),
-              "precio_ars": round(precio_ars, 2),
-              "tipo_cambio_ars_por_usd": round(ars_por_usd, 2),
-              "actualizado": datetime.now(timezone.utc).isoformat()
-          }
+          h = yf.Ticker("SPY.BA").history(period="5d")
+          if not h.empty and not h["Close"].dropna().empty:
+              ars = float(h["Close"].dropna().iloc[-1])
+              fx = yf.Ticker("ARS=X").history(period="5d")
+              if not fx.empty and not fx["Close"].dropna().empty:
+                  cambio = float(fx["Close"].dropna().iloc[-1])
+                  if cambio > 0:
+                      datos["SPY"] = {
+                          "precio": round(ars / cambio, 4),
+                          "precio_ars": round(ars, 2),
+                          "tipo_cambio_ars_por_usd": round(cambio, 2),
+                          "actualizado": datetime.now(timezone.utc).isoformat()
+                      }
+                      print("SPY actualizado")
+                  else:
+                      print("Tipo de cambio no válido; se conserva SPY anterior")
+              else:
+                  print("Sin tipo de cambio; se conserva SPY anterior")
+          else:
+              print("Sin precio SPY; se conserva el anterior")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
               f.write("\n")
-
-          print(f"SPY.BA: ARS {precio_ars:.2f}")
-          print(f"Tipo de cambio: {ars_por_usd:.2f} ARS/USD")
-          print(f"Precio convertido: USD {precio_usd:.4f}")
           PY
 
-      - name: Consultar Bitcoin y Ethereum
+      - name: Actualizar CEDEARs desde Data912
         run: |
           python - <<'PY'
           import json
@@ -78,48 +70,97 @@ jobs:
           from datetime import datetime, timezone
 
           archivo = "cotizaciones.json"
-
           try:
-              with open(archivo, "r", encoding="utf-8") as f:
+              with open(archivo, encoding="utf-8") as f:
                   datos = json.load(f)
           except (FileNotFoundError, json.JSONDecodeError):
               datos = {}
 
-          def consultar(symbol):
+          url = "https://data912.com/live/arg_cedears"
+          req = urllib.request.Request(
+              url, headers={"User-Agent": "dashboard-inversiones"}
+          )
+
+          try:
+              with urllib.request.urlopen(req, timeout=25) as r:
+                  filas = json.loads(r.read().decode("utf-8"))
+
+              if isinstance(filas, dict):
+                  filas = filas.get("data", filas.get("results", []))
+
+              encontrados = {}
+              for fila in filas:
+                  if not isinstance(fila, dict):
+                      continue
+                  simbolo = str(
+                      fila.get("symbol", fila.get("ticker", ""))
+                  ).upper().strip()
+                  if simbolo in ("XPD", "EWZD", "NUD"):
+                      precio = fila.get("c", fila.get("last", fila.get("price")))
+                      if precio is not None:
+                          precio = float(precio)
+                          if precio > 0:
+                              encontrados[simbolo] = {
+                                  "precio": precio,
+                                  "precio_ars": precio,
+                                  "fuente": "Data912",
+                                  "actualizado": datetime.now(
+                                      timezone.utc
+                                  ).isoformat()
+                              }
+
+              for simbolo in ("XPD", "EWZD", "NUD"):
+                  if simbolo in encontrados:
+                      datos[simbolo] = encontrados[simbolo]
+                      print(f"{simbolo}: actualizado")
+                  else:
+                      print(
+                          f"{simbolo}: no encontrado; "
+                          "se conserva el dato anterior si existe"
+                      )
+          except Exception as e:
+              print(f"Error consultando Data912: {e}")
+              print("Se conservan los datos anteriores de los CEDEARs")
+
+          with open(archivo, "w", encoding="utf-8") as f:
+              json.dump(datos, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+          PY
+
+      - name: Actualizar Bitcoin y Ethereum
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          from datetime import datetime, timezone
+
+          archivo = "cotizaciones.json"
+          try:
+              with open(archivo, encoding="utf-8") as f:
+                  datos = json.load(f)
+          except (FileNotFoundError, json.JSONDecodeError):
+              datos = {}
+
+          for simbolo in ("BTCUSDT", "ETHUSDT"):
               url = (
                   "https://api.binance.com/api/v3/ticker/24hr"
-                  f"?symbol={symbol}"
+                  f"?symbol={simbolo}"
               )
-              req = urllib.request.Request(
-                  url,
-                  headers={"User-Agent": "dashboard-inversiones"}
-              )
-              with urllib.request.urlopen(req, timeout=20) as respuesta:
-                  import json as js
-                  return js.loads(respuesta.read().decode("utf-8"))
-
-          actualizado = datetime.now(timezone.utc).isoformat()
-
-          for symbol in ("BTCUSDT", "ETHUSDT"):
               try:
-                  cotizacion = consultar(symbol)
-                  datos[symbol] = {
-                      "precio": float(cotizacion["lastPrice"]),
-                      "variacion_24h_pct": float(
-                          cotizacion["priceChangePercent"]
-                      ),
-                      "actualizado": actualizado
-                  }
-                  print(
-                      f"{symbol}: {datos[symbol]['precio']} USDT "
-                      f"({datos[symbol]['variacion_24h_pct']}% en 24 h)"
+                  req = urllib.request.Request(
+                      url, headers={"User-Agent": "dashboard-inversiones"}
                   )
-              except Exception as error:
-                  print(f"No se pudo actualizar {symbol}: {error}")
-                  if symbol not in datos:
-                      datos[symbol] = {
-                          "error": "Cotización todavía no disponible"
-                      }
+                  with urllib.request.urlopen(req, timeout=20) as r:
+                      cot = json.loads(r.read().decode("utf-8"))
+
+                  datos[simbolo] = {
+                      "precio": float(cot["lastPrice"]),
+                      "variacion_24h_pct": float(cot["priceChangePercent"]),
+                      "actualizado": datetime.now(timezone.utc).isoformat()
+                  }
+                  print(f"{simbolo}: actualizado")
+              except Exception as e:
+                  print(f"{simbolo}: error; se conserva el dato anterior: {e}")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
@@ -134,6 +175,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No hay cambios nuevos para guardar."
           else
-            git commit -m "Actualizar cotizaciones de activos"
+            git commit -m "Actualizar cotizaciones de la cartera"
             git push
           fi
