@@ -167,8 +167,10 @@ jobs:
               f.write("\n")
           PY
 
+      
       - name: Guardar cambios en GitHub
         run: |
+          git pull --rebase origin main
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add cotizaciones.json
@@ -176,5 +178,6 @@ jobs:
             echo "No hay cambios nuevos para guardar."
           else
             git commit -m "Actualizar cotizaciones de la cartera"
-            git push
+            git push origin main
           fi
+
