@@ -9,12 +9,20 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: actualizar-cotizaciones
+  cancel-in-progress: false
+
 jobs:
   actualizar:
     runs-on: ubuntu-latest
+
     steps:
       - name: Descargar el repositorio
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -36,13 +44,15 @@ jobs:
           except (FileNotFoundError, json.JSONDecodeError):
               datos = {}
 
-          h = yf.Ticker("SPY.BA").history(period="5d")
-          if not h.empty and not h["Close"].dropna().empty:
-              ars = float(h["Close"].dropna().iloc[-1])
+          try:
+              h = yf.Ticker("SPY.BA").history(period="5d")
               fx = yf.Ticker("ARS=X").history(period="5d")
-              if not fx.empty and not fx["Close"].dropna().empty:
+
+              if not h.empty and not fx.empty:
+                  ars = float(h["Close"].dropna().iloc[-1])
                   cambio = float(fx["Close"].dropna().iloc[-1])
-                  if cambio > 0:
+
+                  if ars > 0 and cambio > 0:
                       datos["SPY"] = {
                           "precio": round(ars / cambio, 4),
                           "precio_ars": round(ars, 2),
@@ -51,11 +61,11 @@ jobs:
                       }
                       print("SPY actualizado")
                   else:
-                      print("Tipo de cambio no válido; se conserva SPY anterior")
+                      print("SPY o tipo de cambio no válido; se conserva el dato anterior")
               else:
-                  print("Sin tipo de cambio; se conserva SPY anterior")
-          else:
-              print("Sin precio SPY; se conserva el anterior")
+                  print("No hay datos recientes de SPY o del tipo de cambio")
+          except Exception as e:
+              print(f"Error en SPY; se conserva el dato anterior: {e}")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
@@ -70,11 +80,8 @@ jobs:
           from datetime import datetime, timezone
 
           archivo = "cotizaciones.json"
-          try:
-              with open(archivo, encoding="utf-8") as f:
-                  datos = json.load(f)
-          except (FileNotFoundError, json.JSONDecodeError):
-              datos = {}
+          with open(archivo, encoding="utf-8") as f:
+              datos = json.load(f)
 
           url = "https://data912.com/live/arg_cedears"
           req = urllib.request.Request(
@@ -89,38 +96,38 @@ jobs:
                   filas = filas.get("data", filas.get("results", []))
 
               encontrados = {}
+
               for fila in filas:
                   if not isinstance(fila, dict):
                       continue
+
                   simbolo = str(
                       fila.get("symbol", fila.get("ticker", ""))
                   ).upper().strip()
+
                   if simbolo in ("XPD", "EWZD", "NUD"):
-                      precio = fila.get("c", fila.get("last", fila.get("price")))
-                      if precio is not None:
-                          precio = float(precio)
-                          if precio > 0:
-                              encontrados[simbolo] = {
-                                  "precio": precio,
-                                  "precio_ars": precio,
-                                  "fuente": "Data912",
-                                  "actualizado": datetime.now(
-                                      timezone.utc
-                                  ).isoformat()
-                              }
+                      precio = fila.get(
+                          "c", fila.get("last", fila.get("price"))
+                      )
+                      if precio is not None and float(precio) > 0:
+                          encontrados[simbolo] = {
+                              "precio": float(precio),
+                              "precio_ars": float(precio),
+                              "fuente": "Data912",
+                              "actualizado": datetime.now(
+                                  timezone.utc
+                              ).isoformat()
+                          }
 
               for simbolo in ("XPD", "EWZD", "NUD"):
                   if simbolo in encontrados:
                       datos[simbolo] = encontrados[simbolo]
                       print(f"{simbolo}: actualizado")
                   else:
-                      print(
-                          f"{simbolo}: no encontrado; "
-                          "se conserva el dato anterior si existe"
-                      )
+                      print(f"{simbolo}: sin cotización nueva; se conserva el dato anterior")
+
           except Exception as e:
-              print(f"Error consultando Data912: {e}")
-              print("Se conservan los datos anteriores de los CEDEARs")
+              print(f"Error en Data912; se conservan los datos anteriores: {e}")
 
           with open(archivo, "w", encoding="utf-8") as f:
               json.dump(datos, f, indent=2, ensure_ascii=False)
@@ -135,17 +142,15 @@ jobs:
           from datetime import datetime, timezone
 
           archivo = "cotizaciones.json"
-          try:
-              with open(archivo, encoding="utf-8") as f:
-                  datos = json.load(f)
-          except (FileNotFoundError, json.JSONDecodeError):
-              datos = {}
+          with open(archivo, encoding="utf-8") as f:
+              datos = json.load(f)
 
           for simbolo in ("BTCUSDT", "ETHUSDT"):
               url = (
                   "https://api.binance.com/api/v3/ticker/24hr"
                   f"?symbol={simbolo}"
               )
+
               try:
                   req = urllib.request.Request(
                       url, headers={"User-Agent": "dashboard-inversiones"}
@@ -159,6 +164,7 @@ jobs:
                       "actualizado": datetime.now(timezone.utc).isoformat()
                   }
                   print(f"{simbolo}: actualizado")
+
               except Exception as e:
                   print(f"{simbolo}: error; se conserva el dato anterior: {e}")
 
@@ -167,16 +173,21 @@ jobs:
               f.write("\n")
           PY
 
-      
       - name: Guardar cambios en GitHub
         run: |
-          git pull --rebase origin main
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add cotizaciones.json
+
           if git diff --cached --quiet; then
             echo "No hay cambios nuevos para guardar."
-          else
-            git commit -m "Actualizar cotizaciones de la cartera"
-            git push origin main
+            exit 0
           fi
+
+          git commit -m "Actualizar cotizaciones de la cartera"
+
+          git fetch origin main
+          git rebase origin/main
+
+          git push origin HEAD:main
