@@ -4,81 +4,202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mi cartera de inversiones</title>
+<meta name="theme-color" content="#0b1511">
+<title>Cartera de inversiones de Constanza</title>
+
 <style>
 :root {
   color-scheme: dark;
-  --bg: #0b1020;
-  --card: #151e32;
-  --text: #f3f6ff;
-  --muted: #a9b4ca;
-  --accent: #64e0b5;
-  --line: #29344b;
+  --bg: #0b1511;
+  --card: #17271f;
+  --card-light: #1d3026;
+  --text: #f4f1e8;
+  --muted: #b6bdae;
+  --accent: #d5b46a;
+  --accent-light: #ead59a;
+  --line: #344638;
+  --positive: #76d5a2;
+  --negative: #f08e87;
 }
+
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
-  padding: 18px;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(ellipse at top, #1b3025 0%, transparent 55%),
+    var(--bg);
   color: var(--text);
+  line-height: 1.5;
 }
-main { max-width: 900px; margin: auto; }
-h1 { font-size: 28px; }
-h2 { font-size: 20px; }
+
+main { max-width: 960px; margin: auto; }
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 8px 0 26px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ead59a, #b58b3d);
+  color: #102017;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(23px, 5vw, 32px);
+  letter-spacing: -0.6px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 19px;
+  color: var(--accent-light);
+}
+
+.subtitle, .label, .muted, .note { color: var(--muted); }
+
+.subtitle { margin: 3px 0 0; font-size: 13px; }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
+
 .card {
-  background: var(--card);
+  background: linear-gradient(145deg, var(--card-light), var(--card));
   border: 1px solid var(--line);
-  border-radius: 15px;
-  padding: 17px;
-  margin: 13px 0;
+  border-radius: 17px;
+  padding: 20px;
+  margin: 14px 0;
+  box-shadow: 0 8px 24px #00000012;
 }
-.label, .muted, .note { color: var(--muted); }
-.label { font-size: 14px; }
+
+.summary-card {
+  border-top: 2px solid var(--accent);
+}
+
+.label {
+  font-size: 13px;
+  letter-spacing: .2px;
+}
+
 .value {
-  font-size: 22px;
+  font-size: clamp(21px, 4vw, 27px);
   font-weight: bold;
-  margin-top: 9px;
+  color: var(--accent-light);
+  margin-top: 8px;
   overflow-wrap: anywhere;
 }
-.note { font-size: 12px; line-height: 1.5; }
+
+.note { font-size: 12px; line-height: 1.6; }
 table { width: 100%; border-collapse: collapse; }
+
 th, td {
   text-align: left;
-  padding: 12px 7px;
+  padding: 13px 9px;
   border-bottom: 1px solid var(--line);
 }
-th { font-size: 12px; color: var(--muted); }
+
+th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--accent);
+}
+
 td { font-size: 14px; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #ffffff05; }
 .table-wrap { overflow-x: auto; }
+
+.asset-name { font-weight: bold; color: var(--text); }
+.asset-description { color: var(--muted); font-size: 12px; }
+
+.crypto-item {
+  background: #0f1e17;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 17px;
+  min-width: 0;
+}
+
+.crypto-icon {
+  color: var(--accent);
+  font-size: 23px;
+  margin-bottom: 8px;
+}
+
+.crypto-price {
+  font-size: clamp(21px, 4vw, 27px);
+  font-weight: bold;
+  color: var(--accent-light);
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+
+.positive { color: var(--positive); }
+.negative { color: var(--negative); }
+
 .badge {
   display: inline-block;
-  background: #303b51;
+  background: #263c2e;
+  color: var(--accent-light);
+  border: 1px solid #42583f;
   border-radius: 8px;
-  padding: 6px 9px;
-  font-size: 12px;
+  padding: 5px 8px;
+  font-size: 11px;
+}
+
+footer {
+  padding: 8px 0 20px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  body { padding: 12px; }
+  .card { padding: 15px; border-radius: 14px; }
+  th, td { padding: 11px 7px; }
+  td { font-size: 13px; }
 }
 </style>
 </head>
+
 <body>
 <main>
-<h1>📈 Dashboard de inversiones</h1>
-<p class="muted">CEDEARs y criptomonedas · Cotizaciones de referencia</p>
+<header>
+  <div class="logo">₿</div>
+  <div>
+    <h1>Mi cartera de inversiones</h1>
+    <p class="subtitle">CEDEARs y Cripto · Cotizaciones de referencia</p>
+  </div>
+</header>
 
 <div class="grid">
-  <section class="card">
+  <section class="card summary-card">
     <div class="label">Capital de referencia CEDEARs</div>
     <div class="value" id="capital">US$ 525,22</div>
     <p class="note">Costo registrado de las cuatro posiciones.</p>
   </section>
-  <section class="card">
-    <div class="label">Objetivo de duplicación</div>
-    <div class="value" id="objetivo">US$ 1.050,44</div>
+
+  <section class="card summary-card">
+    <div class="label">Objetivo</div>
+    <div class="value" id="objetivo">US$ 1.000</div>
+    <p class="note">Meta calculada sobre el capital de referencia</p>
   </section>
 </div>
 
@@ -99,30 +220,34 @@ td { font-size: 14px; }
   </div>
   <p class="note">
     Los precios de los CEDEARs se muestran en pesos argentinos cuando
-    la fuente los entrega en ARS. BTC y ETH se muestran en USDT.
-    USDT sigue aproximadamente al dólar estadounidense, pero no es
-    exactamente lo mismo que USD.
+    la fuente los entrega en ARS. BTC y ETH se muestran como referencia
+    en USDT; su fuente puede cotizar en USD, que no es exactamente lo mismo.
   </p>
-  <p id="estado" class="note">Consultando cotizaciones...</p>
+  <p id="estado" class="note" aria-live="polite">
+    Consultando cotizaciones...
+  </p>
 </section>
 
 <section class="card">
-  <h2>₿ Criptomonedas</h2>
+  <h2>Criptomonedas</h2>
   <div class="grid">
-    <div>
+    <div class="crypto-item">
+      <div class="crypto-icon">₿</div>
       <div class="label">Bitcoin (BTC/USDT)</div>
-      <div class="value" id="btc">Cargando...</div>
-      <p class="note" id="btc-cambio"></p>
+      <div class="crypto-price" id="btc">Cargando...</div>
+      <p class="note" id="btc-cambio">Consultando variación...</p>
     </div>
-    <div>
+
+    <div class="crypto-item">
+      <div class="crypto-icon">Ξ</div>
       <div class="label">Ethereum (ETH/USDT)</div>
-      <div class="value" id="eth">Cargando...</div>
-      <p class="note" id="eth-cambio"></p>
+      <div class="crypto-price" id="eth">Cargando...</div>
+      <p class="note" id="eth-cambio">Consultando variación...</p>
     </div>
   </div>
   <p class="note">
     Las criptomonedas son cotizaciones de referencia; no se incluyen
-    en el capital de los CEDEARs ni en el objetivo de duplicación.
+    en el capital de los CEDEARs ni en el objetivo.
   </p>
 </section>
 
@@ -138,9 +263,13 @@ td { font-size: 14px; }
   </p>
 </section>
 
-<p class="note">
-  Datos informativos; no constituyen asesoramiento financiero.
-</p>
+<footer>
+  <p class="note">
+    <span class="badge">Datos de referencia</span>
+    <br><br>
+    Información orientativa; no constituye asesoramiento financiero.
+  </p>
+</footer>
 </main>
 
 <script>
@@ -154,7 +283,10 @@ const cartera = [
 ];
 
 const formato = (n, moneda) => {
-  if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) return "Pendiente";
+  if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) {
+    return "Pendiente";
+  }
+
   return new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: moneda === "ARS" ? "ARS" : "USD",
@@ -173,8 +305,14 @@ async function actualizar() {
   const estado = document.getElementById("estado");
 
   try {
-    const respuesta = await fetch("./cotizaciones.json?t=" + Date.now());
-    if (!respuesta.ok) throw new Error("No se pudo leer cotizaciones.json");
+    const respuesta = await fetch("./cotizaciones.json?t=" + Date.now(), {
+      cache: "no-store"
+    });
+
+    if (!respuesta.ok) {
+      throw new Error("No se pudo leer cotizaciones.json");
+    }
+
     const datos = await respuesta.json();
 
     document.getElementById("tabla").innerHTML = cartera.map(a => {
@@ -185,19 +323,27 @@ async function actualizar() {
 
       let moneda = a.moneda;
       if (a.simbolo === "SPY") moneda = "USD";
-      if (a.simbolo === "BTCUSDT" || a.simbolo === "ETHUSDT") moneda = "USDT";
+      if (a.simbolo === "BTCUSDT" || a.simbolo === "ETHUSDT") {
+        moneda = "USDT";
+      }
 
-      const etiquetaMoneda = moneda === "ARS" ? "ARS" :
-        moneda === "USDT" ? "USDT" : "USD";
+      const cotizacion = precio === null
+        ? "Pendiente"
+        : moneda === "ARS"
+          ? formato(precio, "ARS")
+          : "US$ " + precio.toLocaleString("es-AR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }) + (moneda === "USDT" ? " USDT" : "");
 
       return `<tr>
-        <td><strong>${a.simbolo}</strong><br><span class="note">${a.nombre}</span></td>
+        <td>
+          <span class="asset-name">${a.simbolo}</span><br>
+          <span class="asset-description">${a.nombre}</span>
+        </td>
         <td>${a.cantidad}</td>
         <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
-        <td>${precio === null ? "Pendiente" :
-          formato(precio, moneda === "ARS" ? "ARS" : "USD")
-            .replace("US$", etiquetaMoneda + " ")
-            .replace("USD", etiquetaMoneda)}</td>
+        <td>${cotizacion}</td>
       </tr>`;
     }).join("");
 
@@ -209,17 +355,25 @@ async function actualizar() {
     );
 
     estado.textContent = faltantes.length
-      ? "Sin cotización válida para: " + faltantes.map(a => a.simbolo).join(", ") +
-        ". Puede que la fuente no haya actualizado esos precios."
-      : "Se encontraron cotizaciones para los seis activos. Revisá la fecha de actualización en cotizaciones.json.";
+      ? "Sin cotización válida para: " +
+        faltantes.map(a => a.simbolo).join(", ") +
+        ". Se mostrarán cuando haya datos disponibles."
+      : "Cotizaciones cargadas desde cotizaciones.json.";
 
   } catch (e) {
-    estado.textContent = "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json.";
+    estado.textContent =
+      "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json.";
+
     document.getElementById("tabla").innerHTML = cartera.map(a =>
-      `<tr><td><strong>${a.simbolo}</strong><br><span class="note">${a.nombre}</span></td>
-      <td>${a.cantidad}</td><td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
-      <td>Pendiente</td></tr>`
+      `<tr>
+        <td><span class="asset-name">${a.simbolo}</span><br>
+        <span class="asset-description">${a.nombre}</span></td>
+        <td>${a.cantidad}</td>
+        <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
+        <td>Pendiente</td>
+      </tr>`
     ).join("");
+
     console.error(e);
   }
 }
@@ -227,16 +381,26 @@ async function actualizar() {
 function mostrarCrypto(datos, simbolo, idPrecio, idCambio) {
   const cot = datos[simbolo];
   const precio = Number(cot?.precio);
+
   document.getElementById(idPrecio).textContent =
     Number.isFinite(precio) && precio > 0
-      ? "USDT " + precio.toLocaleString("es-AR", { maximumFractionDigits: 2 })
+      ? "US$ " + precio.toLocaleString("es-AR", {
+          maximumFractionDigits: 2
+        })
       : "Pendiente";
 
   const variacion = Number(cot?.variacion_24h_pct);
-  document.getElementById(idCambio).textContent =
-    Number.isFinite(variacion)
-      ? (variacion > 0 ? "+" : "") + variacion.toFixed(2) + "% en 24 h"
-      : "Variación no disponible";
+  const elemento = document.getElementById(idCambio);
+
+  if (Number.isFinite(variacion)) {
+    elemento.textContent =
+      (variacion > 0 ? "+" : "") + variacion.toFixed(2) + "% en 24 h";
+    elemento.className = "note " +
+      (variacion > 0 ? "positive" : variacion < 0 ? "negative" : "");
+  } else {
+    elemento.textContent = "Variación no disponible";
+    elemento.className = "note";
+  }
 }
 
 actualizar();
