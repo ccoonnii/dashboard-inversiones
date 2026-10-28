@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -88,9 +89,7 @@ h2 {
   box-shadow: 0 8px 24px #00000012;
 }
 
-.summary-card {
-  border-top: 2px solid var(--accent);
-}
+.summary-card { border-top: 2px solid var(--accent); }
 
 .label {
   font-size: 13px;
@@ -165,9 +164,7 @@ tbody tr:hover { background: #ffffff05; }
   font-size: 11px;
 }
 
-footer {
-  padding: 8px 0 20px;
-}
+footer { padding: 8px 0 20px; }
 
 footer a {
   color: var(--accent-light);
@@ -175,13 +172,8 @@ footer a {
   font-weight: bold;
 }
 
-footer a:hover {
-  text-decoration: underline;
-}
-
-.source-row {
-  margin: 12px 0;
-}
+footer a:hover { text-decoration: underline; }
+.source-row { margin: 12px 0; }
 
 @media (max-width: 520px) {
   body { padding: 12px; }
@@ -194,10 +186,11 @@ footer a:hover {
 
 <body>
 <main>
+
 <header>
   <div class="logo">₿</div>
   <div>
-    <h1>Mi cartera de inversiones</h1>
+    <h1>Cartera de inversiones de Constanza</h1>
     <p class="subtitle">CEDEARs y Cripto · Cotizaciones de referencia</p>
   </div>
 </header>
@@ -205,19 +198,20 @@ footer a:hover {
 <div class="grid">
   <section class="card summary-card">
     <div class="label">Capital de referencia CEDEARs</div>
-    <div class="value" id="capital">US$ 525,22</div>
+    <div class="value" id="capital">Cargando...</div>
     <p class="note">Costo registrado de las cuatro posiciones.</p>
   </section>
 
   <section class="card summary-card">
     <div class="label">Objetivo</div>
-    <div class="value" id="objetivo">US$ 1.000</div>
-    <p class="note">Meta calculada sobre el capital de referencia</p>
+    <div class="value" id="objetivo">Cargando...</div>
+    <p class="note">Meta calculada sobre el capital de referencia.</p>
   </section>
 </div>
 
 <section class="card">
   <h2>Mis activos</h2>
+
   <div class="table-wrap">
     <table>
       <thead>
@@ -231,11 +225,13 @@ footer a:hover {
       <tbody id="tabla"></tbody>
     </table>
   </div>
+
   <p class="note">
     Los precios de los CEDEARs se muestran en pesos argentinos cuando
     la fuente los entrega en ARS. BTC y ETH se muestran como referencia
     en USDT; su fuente puede cotizar en USD, que no es exactamente lo mismo.
   </p>
+
   <p id="estado" class="note" aria-live="polite">
     Consultando cotizaciones...
   </p>
@@ -243,6 +239,7 @@ footer a:hover {
 
 <section class="card">
   <h2>Criptomonedas</h2>
+
   <div class="grid">
     <div class="crypto-item">
       <div class="crypto-icon">₿</div>
@@ -258,6 +255,7 @@ footer a:hover {
       <p class="note" id="eth-cambio">Consultando variación...</p>
     </div>
   </div>
+
   <p class="note">
     Las criptomonedas son cotizaciones de referencia; no se incluyen
     en el capital de los CEDEARs ni en el objetivo.
@@ -268,8 +266,9 @@ footer a:hover {
   <h2>Detalle de la cartera</h2>
   <p>SPY: 5 unidades · Costo de referencia US$ 66,10.</p>
   <p>XP Inc. (XPD): 26 unidades · Costo US$ 109,20.</p>
-  <p>iShares Brazil (EWZD): 17 unidades · Costo US$ 303,72.</p>
+  <p>iShares ETF de Brasil (EWZD): 17 unidades · Costo US$ 303,72.</p>
   <p>Nubank (NUD): 7 unidades · Costo US$ 46,20.</p>
+
   <p class="note">
     Las cantidades de BTC y ETH todavía no están registradas.
     Por eso se muestran sus precios, no el valor de una posición propia.
@@ -287,10 +286,10 @@ footer a:hover {
 
     <p class="source-row">
       <strong>CEDEARs:</strong><br>
-      <a href="https://www.cocos.capital/"
+      <a href="https://app.cocos.capital/"
          target="_blank"
          rel="noopener noreferrer">
-        Cocos Capital ↗
+        Cocos Capital · Acceder a mis inversiones ↗
       </a>
     </p>
 
@@ -309,16 +308,53 @@ footer a:hover {
     </p>
   </section>
 </footer>
+
 </main>
 
 <script>
 const cartera = [
-  { simbolo: "SPY", nombre: "SPDR S&P 500", cantidad: 5, costo: 66.10, moneda: "USD" },
-  { simbolo: "XPD", nombre: "XP Inc.", cantidad: 26, costo: 109.20, moneda: "ARS" },
-  { simbolo: "EWZD", nombre: "iShares MSCI Brazil ETF", cantidad: 17, costo: 303.72, moneda: "ARS" },
-  { simbolo: "NUD", nombre: "Nubank", cantidad: 7, costo: 46.20, moneda: "ARS" },
-  { simbolo: "BTCUSDT", nombre: "Bitcoin", cantidad: "—", costo: null, moneda: "USDT" },
-  { simbolo: "ETHUSDT", nombre: "Ethereum", cantidad: "—", costo: null, moneda: "USDT" }
+  {
+    simbolo: "SPY",
+    nombre: "SPDR S&P 500",
+    cantidad: 5,
+    costo: 66.10,
+    moneda: "USD"
+  },
+  {
+    simbolo: "XPD",
+    nombre: "XP Inc.",
+    cantidad: 26,
+    costo: 109.20,
+    moneda: "ARS"
+  },
+  {
+    simbolo: "EWZD",
+    nombre: "iShares MSCI Brasil ETF",
+    cantidad: 17,
+    costo: 303.72,
+    moneda: "ARS"
+  },
+  {
+    simbolo: "NUD",
+    nombre: "Nubank",
+    cantidad: 7,
+    costo: 46.20,
+    moneda: "ARS"
+  },
+  {
+    simbolo: "BTCUSDT",
+    nombre: "Bitcoin",
+    cantidad: "—",
+    costo: null,
+    moneda: "USDT"
+  },
+  {
+    simbolo: "ETHUSDT",
+    nombre: "Ethereum",
+    cantidad: "—",
+    costo: null,
+    moneda: "USDT"
+  }
 ];
 
 const formato = (n, moneda) => {
@@ -337,16 +373,20 @@ const capital = cartera
   .filter(a => a.costo !== null)
   .reduce((s, a) => s + a.costo, 0);
 
-document.getElementById("capital").textContent = formato(capital, "USD");
-document.getElementById("objetivo").textContent = formato(capital * 2, "USD");
+document.getElementById("capital").textContent =
+  formato(capital, "USD");
+
+document.getElementById("objetivo").textContent =
+  formato(capital * 2, "USD");
 
 async function actualizar() {
   const estado = document.getElementById("estado");
 
   try {
-    const respuesta = await fetch("./cotizaciones.json?t=" + Date.now(), {
-      cache: "no-store"
-    });
+    const respuesta = await fetch(
+      "./cotizaciones.json?t=" + Date.now(),
+      { cache: "no-store" }
+    );
 
     if (!respuesta.ok) {
       throw new Error("No se pudo leer cotizaciones.json");
@@ -354,43 +394,51 @@ async function actualizar() {
 
     const datos = await respuesta.json();
 
-    document.getElementById("tabla").innerHTML = cartera.map(a => {
-      const cot = datos[a.simbolo];
-      const precio = cot && Number(cot.precio) > 0
-        ? Number(cot.precio)
-        : null;
+    document.getElementById("tabla").innerHTML =
+      cartera.map(a => {
+        const cot = datos[a.simbolo];
 
-      let moneda = a.moneda;
-      if (a.simbolo === "SPY") moneda = "USD";
-      if (a.simbolo === "BTCUSDT" || a.simbolo === "ETHUSDT") {
-        moneda = "USDT";
-      }
+        const precio = cot && Number(cot.precio) > 0
+          ? Number(cot.precio)
+          : null;
 
-      const cotizacion = precio === null
-        ? "Pendiente"
-        : moneda === "ARS"
-          ? formato(precio, "ARS")
-          : "US$ " + precio.toLocaleString("es-AR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            }) + (moneda === "USDT" ? " USDT" : "");
+        let moneda = a.moneda;
 
-      return `<tr>
-        <td>
-          <span class="asset-name">${a.simbolo}</span><br>
-          <span class="asset-description">${a.nombre}</span>
-        </td>
-        <td>${a.cantidad}</td>
-        <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
-        <td>${cotizacion}</td>
-      </tr>`;
-    }).join("");
+        if (a.simbolo === "SPY") moneda = "USD";
+
+        if (
+          a.simbolo === "BTCUSDT" ||
+          a.simbolo === "ETHUSDT"
+        ) {
+          moneda = "USDT";
+        }
+
+        const cotizacion = precio === null
+          ? "Pendiente"
+          : moneda === "ARS"
+            ? formato(precio, "ARS")
+            : "US$ " + precio.toLocaleString("es-AR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }) + (moneda === "USDT" ? " USDT" : "");
+
+        return `<tr>
+          <td>
+            <span class="asset-name">${a.simbolo}</span><br>
+            <span class="asset-description">${a.nombre}</span>
+          </td>
+          <td>${a.cantidad}</td>
+          <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
+          <td>${cotizacion}</td>
+        </tr>`;
+      }).join("");
 
     mostrarCrypto(datos, "BTCUSDT", "btc", "btc-cambio");
     mostrarCrypto(datos, "ETHUSDT", "eth", "eth-cambio");
 
     const faltantes = cartera.filter(a =>
-      !datos[a.simbolo] || !(Number(datos[a.simbolo].precio) > 0)
+      !datos[a.simbolo] ||
+      !(Number(datos[a.simbolo].precio) > 0)
     );
 
     estado.textContent = faltantes.length
@@ -403,15 +451,18 @@ async function actualizar() {
     estado.textContent =
       "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json.";
 
-    document.getElementById("tabla").innerHTML = cartera.map(a =>
-      `<tr>
-        <td><span class="asset-name">${a.simbolo}</span><br>
-        <span class="asset-description">${a.nombre}</span></td>
-        <td>${a.cantidad}</td>
-        <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
-        <td>Pendiente</td>
-      </tr>`
-    ).join("");
+    document.getElementById("tabla").innerHTML =
+      cartera.map(a => `
+        <tr>
+          <td>
+            <span class="asset-name">${a.simbolo}</span><br>
+            <span class="asset-description">${a.nombre}</span>
+          </td>
+          <td>${a.cantidad}</td>
+          <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
+          <td>Pendiente</td>
+        </tr>
+      `).join("");
 
     console.error(e);
   }
@@ -433,9 +484,16 @@ function mostrarCrypto(datos, simbolo, idPrecio, idCambio) {
 
   if (Number.isFinite(variacion)) {
     elemento.textContent =
-      (variacion > 0 ? "+" : "") + variacion.toFixed(2) + "% en 24 h";
+      (variacion > 0 ? "+" : "") +
+      variacion.toFixed(2) +
+      "% en 24 h";
+
     elemento.className = "note " +
-      (variacion > 0 ? "positive" : variacion < 0 ? "negative" : "");
+      (variacion > 0
+        ? "positive"
+        : variacion < 0
+          ? "negative"
+          : "");
   } else {
     elemento.textContent = "Variación no disponible";
     elemento.className = "note";
@@ -444,5 +502,6 @@ function mostrarCrypto(datos, simbolo, idPrecio, idCambio) {
 
 actualizar();
 </script>
+
 </body>
 </html>
