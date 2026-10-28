@@ -70,6 +70,62 @@ jobs:
           print(f"Precio convertido: USD {precio_usd:.4f}")
           PY
 
+      - name: Consultar Bitcoin y Ethereum
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          from datetime import datetime, timezone
+
+          archivo = "cotizaciones.json"
+
+          try:
+              with open(archivo, "r", encoding="utf-8") as f:
+                  datos = json.load(f)
+          except (FileNotFoundError, json.JSONDecodeError):
+              datos = {}
+
+          def consultar(symbol):
+              url = (
+                  "https://api.binance.com/api/v3/ticker/24hr"
+                  f"?symbol={symbol}"
+              )
+              req = urllib.request.Request(
+                  url,
+                  headers={"User-Agent": "dashboard-inversiones"}
+              )
+              with urllib.request.urlopen(req, timeout=20) as respuesta:
+                  import json as js
+                  return js.loads(respuesta.read().decode("utf-8"))
+
+          actualizado = datetime.now(timezone.utc).isoformat()
+
+          for symbol in ("BTCUSDT", "ETHUSDT"):
+              try:
+                  cotizacion = consultar(symbol)
+                  datos[symbol] = {
+                      "precio": float(cotizacion["lastPrice"]),
+                      "variacion_24h_pct": float(
+                          cotizacion["priceChangePercent"]
+                      ),
+                      "actualizado": actualizado
+                  }
+                  print(
+                      f"{symbol}: {datos[symbol]['precio']} USDT "
+                      f"({datos[symbol]['variacion_24h_pct']}% en 24 h)"
+                  )
+              except Exception as error:
+                  print(f"No se pudo actualizar {symbol}: {error}")
+                  if symbol not in datos:
+                      datos[symbol] = {
+                          "error": "Cotización todavía no disponible"
+                      }
+
+          with open(archivo, "w", encoding="utf-8") as f:
+              json.dump(datos, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+          PY
+
       - name: Guardar cambios en GitHub
         run: |
           git config user.name "github-actions[bot]"
@@ -78,6 +134,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No hay cambios nuevos para guardar."
           else
-            git commit -m "Actualizar cotización de SPY"
+            git commit -m "Actualizar cotizaciones de activos"
             git push
           fi
