@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,7 +21,9 @@
     }
     * { box-sizing: border-box; }
     body {
-      margin: 0; background: var(--fondo); color: var(--texto);
+      margin: 0;
+      background: var(--fondo);
+      color: var(--texto);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.5;
     }
@@ -83,7 +86,9 @@
       .cripto-grid { grid-template-columns: 1fr; }
       .boton { padding: 10px 12px; font-size: 13px; }
     }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -201,21 +206,26 @@
       { symbol: "NUD", nombre: "NUD", tipo: "CEDEAR", quantity: 7, costTotal: 46.20 }
     ];
 
-    // Estimación editable: comisión 0,45 % más IVA del 21 % sobre la comisión.
-    // No se incluyen derechos de mercado ni otros cargos no confirmados.
+    // Comisión estimada: 0,45 % más IVA del 21 % sobre la comisión.
+    // No incluye derechos de mercado ni otros cargos no confirmados.
     const COMISION = 0.0045;
     const IVA = 0.21;
     const TASA_OPERACION = COMISION * (1 + IVA);
 
+    // Formato numérico argentino, sin símbolo de moneda automático.
     const formatoUSD = new Intl.NumberFormat("es-AR", {
-      style: "currency", currency: "USD",
-      minimumFractionDigits: 2, maximumFractionDigits: 2
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4
     });
-    const formatoPrecio = new Intl.NumberFormat("es-AR", {
-      minimumFractionDigits: 2, maximumFractionDigits: 4
+
+    const formatoUSDT = new Intl.NumberFormat("es-AR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
+
     const formatoPorcentaje = new Intl.NumberFormat("es-AR", {
-      minimumFractionDigits: 2, maximumFractionDigits: 2
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
 
     function numeroValido(valor) {
@@ -226,45 +236,90 @@
 
     function obtenerRegistro(datos, simbolo) {
       if (!datos || typeof datos !== "object") return null;
-      if (Object.prototype.hasOwnProperty.call(datos, simbolo)) return datos[simbolo];
-      if (datos.data && typeof datos.data === "object" &&
-          Object.prototype.hasOwnProperty.call(datos.data, simbolo)) return datos.data[simbolo];
+
+      if (Object.prototype.hasOwnProperty.call(datos, simbolo)) {
+        return datos[simbolo];
+      }
+
+      if (
+        datos.data &&
+        typeof datos.data === "object" &&
+        Object.prototype.hasOwnProperty.call(datos.data, simbolo)
+      ) {
+        return datos.data[simbolo];
+      }
+
       return null;
     }
 
     function extraerCotizacion(raw) {
       if (typeof raw === "number" || typeof raw === "string") {
-        return { precio: numeroValido(raw), moneda: null, variacion: null, actualizado: null };
+        return {
+          precio: numeroValido(raw),
+          moneda: null,
+          variacion: null,
+          actualizado: null
+        };
       }
+
       if (!raw || typeof raw !== "object") {
-        return { precio: null, moneda: null, variacion: null, actualizado: null };
+        return {
+          precio: null,
+          moneda: null,
+          variacion: null,
+          actualizado: null
+        };
       }
 
       const precio = numeroValido(
         raw.precio ?? raw.price ?? raw.last ?? raw.close ??
         raw.cotizacion ?? raw.ultimo ?? raw.value
       );
+
       const variacion = numeroValido(
         raw.variacion_24h_pct ?? raw.variacion_pct ??
         raw.change_percent ?? raw.changePercent ?? raw.porcentaje
       );
-      const monedaInformada = String(raw.moneda ?? raw.currency ?? raw.divisa ?? "").trim().toUpperCase();
-      const moneda = ["USD", "ARS", "USDT"].includes(monedaInformada) ? monedaInformada : null;
+
+      const monedaInformada = String(
+        raw.moneda ?? raw.currency ?? raw.divisa ?? ""
+      ).trim().toUpperCase();
+
+      const moneda = ["USD", "ARS", "USDT"].includes(monedaInformada)
+        ? monedaInformada
+        : null;
 
       return {
-        precio, moneda, variacion,
+        precio,
+        moneda,
+        variacion,
         actualizado: raw.actualizado ?? raw.updated_at ?? null
       };
     }
 
     function escaparHTML(valor) {
       return String(valor).replace(/[&<>"']/g, c => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
       })[c]);
     }
 
-    function dinero(n) { return Number.isFinite(n) ? formatoUSD.format(n) : "—"; }
-    function precio(n) { return Number.isFinite(n) ? formatoPrecio.format(n) : "—"; }
+    // Todos los importes de la cartera usan USD como prefijo.
+    // Ejemplos: USD 4,23 | USD 109,98 | - USD 1,75
+    function dinero(n) {
+      if (!Number.isFinite(n)) return "—";
+
+      const signo = n < 0 ? "- " : "";
+      return signo + "USD " + formatoUSD.format(Math.abs(n));
+    }
+
+    function precio(n) {
+      if (!Number.isFinite(n)) return "—";
+      return "USD " + formatoUSD.format(n);
+    }
 
     function clase(n) {
       if (!Number.isFinite(n)) return "neutro";
@@ -274,16 +329,25 @@
     }
 
     function variacion(n) {
-      if (!Number.isFinite(n)) return '<span class="insignia neutro">Sin variación disponible</span>';
+      if (!Number.isFinite(n)) {
+        return '<span class="insignia neutro">Sin variación disponible</span>';
+      }
+
       const signo = n > 0 ? "+" : "";
+
       return `<span class="insignia ${clase(n)}">${signo}${formatoPorcentaje.format(n)}%</span>`;
     }
 
     function formatearFecha(fecha) {
       if (!fecha) return null;
+
       const d = new Date(fecha);
       if (Number.isNaN(d.getTime())) return null;
-      return d.toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" });
+
+      return d.toLocaleString("es-AR", {
+        dateStyle: "short",
+        timeStyle: "short"
+      });
     }
 
     function actualizarResumen(id, valor, color = "") {
@@ -295,6 +359,7 @@
     function renderizar(datos) {
       const aviso = document.getElementById("aviso");
       const cuerpo = document.getElementById("tabla-activos");
+
       aviso.hidden = true;
 
       let capital = 0;
@@ -302,17 +367,24 @@
       let costoCompraTotal = 0;
       let costoVentaTotal = 0;
       let posicionesValuadas = 0;
+
       const filas = [];
       const fechas = [];
 
       for (const activo of cartera) {
         capital += activo.costTotal;
-        const q = extraerCotizacion(obtenerRegistro(datos, activo.symbol));
 
-        // Si el JSON no informa moneda, se interpreta como USD, tal como en la versión anterior.
-        // Confirmá esta equivalencia con la fuente de cotizaciones antes de confiar en el resultado.
+        const q = extraerCotizacion(
+          obtenerRegistro(datos, activo.symbol)
+        );
+
+        // Las cotizaciones de la cartera deben estar expresadas en USD.
+        // Si el JSON no informa moneda, se conserva la interpretación anterior.
         const moneda = q.moneda || "USD";
-        const valida = Number.isFinite(q.precio) && q.precio >= 0 && moneda === "USD";
+        const valida =
+          Number.isFinite(q.precio) &&
+          q.precio >= 0 &&
+          moneda === "USD";
 
         let valorActual = null;
         let bruto = null;
@@ -324,7 +396,11 @@
         if (valida && activo.quantity > 0) {
           valorActual = q.precio * activo.quantity;
           bruto = valorActual - activo.costTotal;
-          pctBruto = activo.costTotal > 0 ? bruto / activo.costTotal * 100 : null;
+
+          pctBruto = activo.costTotal > 0
+            ? bruto / activo.costTotal * 100
+            : null;
+
           costoCompra = activo.costTotal * TASA_OPERACION;
           costoVenta = valorActual * TASA_OPERACION;
           neto = bruto - costoCompra - costoVenta;
@@ -340,18 +416,26 @@
           if (Number.isFinite(timestamp)) fechas.push(timestamp);
         }
 
-        const precioTexto = valida ? `${precio(q.precio)} USD` : "Sin cotización USD";
+        const precioTexto = valida
+          ? precio(q.precio)
+          : "Sin cotización USD";
+
         const resultadoHTML = bruto === null
           ? '<span class="insignia neutro">Sin dato</span>'
-          : `<div class="resultado ${clase(bruto)}">${dinero(bruto)}</div>
-             <div class="detalle">Bruto: ${variacion(pctBruto)}</div>
-             <div class="detalle">Comisión compra estimada: ${dinero(costoCompra)}</div>
-             <div class="detalle">Comisión venta estimada: ${dinero(costoVenta)}</div>
-             <div class="resultado ${clase(neto)}">Neto estimado: ${dinero(neto)}</div>`;
+          : `
+            <div class="resultado ${clase(bruto)}">${dinero(bruto)}</div>
+            <div class="detalle">Bruto: ${variacion(pctBruto)}</div>
+            <div class="detalle">Comisión compra estimada: ${dinero(costoCompra)}</div>
+            <div class="detalle">Comisión venta estimada: ${dinero(costoVenta)}</div>
+            <div class="resultado ${clase(neto)}">Neto estimado: ${dinero(neto)}</div>
+          `;
 
         filas.push(`
           <tr>
-            <td><div class="activo">${escaparHTML(activo.nombre)}</div><span class="tipo">${escaparHTML(activo.tipo)}</span></td>
+            <td>
+              <div class="activo">${escaparHTML(activo.nombre)}</div>
+              <span class="tipo">${escaparHTML(activo.tipo)}</span>
+            </td>
             <td>${activo.quantity}</td>
             <td>${precioTexto}</td>
             <td>${dinero(valorActual)}</td>
@@ -362,77 +446,112 @@
       }
 
       cuerpo.innerHTML = filas.join("");
+
       actualizarResumen("capital-invertido", dinero(capital));
 
       if (posicionesValuadas === cartera.length) {
         const brutoTotal = valorTotal - capital;
         const netoTotal = brutoTotal - costoCompraTotal - costoVentaTotal;
-        const pctNeto = capital > 0 ? netoTotal / capital * 100 : null;
+        const pctNeto = capital > 0
+          ? netoTotal / capital * 100
+          : null;
 
         actualizarResumen("valor-cartera", dinero(valorTotal));
-        actualizarResumen("resultado-total", dinero(netoTotal), clase(netoTotal));
+        actualizarResumen(
+          "resultado-total",
+          dinero(netoTotal),
+          clase(netoTotal)
+        );
+
         document.getElementById("resultado-porcentaje").innerHTML =
           `Después de costos estimados de compra y venta · ${variacion(pctNeto)}`;
 
         aviso.textContent =
-          `Resultado bruto: ${dinero(brutoTotal)}. Comisión de compra estimada: ${dinero(costoCompraTotal)}. ` +
-          `Comisión de venta estimada: ${dinero(costoVentaTotal)}. Resultado neto estimado: ${dinero(netoTotal)}. ` +
+          `Resultado bruto: ${dinero(brutoTotal)}. ` +
+          `Comisión de compra estimada: ${dinero(costoCompraTotal)}. ` +
+          `Comisión de venta estimada: ${dinero(costoVentaTotal)}. ` +
+          `Resultado neto estimado: ${dinero(netoTotal)}. ` +
           `No incluye derechos de mercado ni otros cargos no confirmados.`;
+
         aviso.hidden = false;
       } else {
         actualizarResumen("valor-cartera", dinero(valorTotal));
         actualizarResumen("resultado-total", "Parcial", "neutro");
+
         document.getElementById("resultado-porcentaje").textContent =
           `Se pudieron valorar ${posicionesValuadas} de ${cartera.length} posiciones.`;
+
         aviso.textContent =
           "Falta una cotización válida en USD para una o más posiciones. El resultado total es parcial.";
+
         aviso.hidden = false;
       }
 
       renderizarCripto(datos, "BTCUSDT", "precio-btc", "variacion-btc");
       renderizarCripto(datos, "ETHUSDT", "precio-eth", "variacion-eth");
 
-      // Usamos timestamps originales, no fechas localizadas, para evitar errores de parseo.
+      // Usamos timestamps originales para evitar errores de parseo.
       if (datos && datos.actualizado) {
         const timestampGeneral = new Date(datos.actualizado).getTime();
         if (Number.isFinite(timestampGeneral)) fechas.push(timestampGeneral);
       }
 
       const ultima = fechas.length ? Math.max(...fechas) : null;
-      document.getElementById("ultima-actualizacion").textContent = ultima !== null
-        ? `Última cotización informada: ${formatearFecha(new Date(ultima).toISOString())}`
-        : "Última cotización informada: fecha no disponible";
+
+      document.getElementById("ultima-actualizacion").textContent =
+        ultima !== null
+          ? `Última cotización informada: ${formatearFecha(new Date(ultima).toISOString())}`
+          : "Última cotización informada: fecha no disponible";
     }
 
     function renderizarCripto(datos, simbolo, idPrecio, idVariacion) {
       const q = extraerCotizacion(obtenerRegistro(datos, simbolo));
-      document.getElementById(idPrecio).textContent = Number.isFinite(q.precio)
-        ? `${formatoPrecio.format(q.precio)} USDT` : "Sin cotización";
 
-      document.getElementById(idVariacion).innerHTML = Number.isFinite(q.variacion)
-        ? `Variación 24 h: ${variacion(q.variacion)}`
-        : "Variación diaria no disponible";
+      document.getElementById(idPrecio).textContent =
+        Number.isFinite(q.precio)
+          ? `${formatoUSDT.format(q.precio)} USDT`
+          : "Sin cotización";
+
+      document.getElementById(idVariacion).innerHTML =
+        Number.isFinite(q.variacion)
+          ? `Variación 24 h: ${variacion(q.variacion)}`
+          : "Variación diaria no disponible";
     }
 
     async function cargarCotizaciones() {
       const boton = document.getElementById("actualizar");
       const estado = document.getElementById("estado");
+
       boton.disabled = true;
       boton.textContent = "Actualizando…";
       estado.textContent = "Consultando cotizaciones…";
 
       try {
-        const respuesta = await fetch(`./cotizaciones.json?t=${Date.now()}`, { cache: "no-store" });
-        if (!respuesta.ok) throw new Error(`No se pudo leer cotizaciones.json (HTTP ${respuesta.status})`);
+        const respuesta = await fetch(
+          `./cotizaciones.json?t=${Date.now()}`,
+          { cache: "no-store" }
+        );
+
+        if (!respuesta.ok) {
+          throw new Error(
+            `No se pudo leer cotizaciones.json (HTTP ${respuesta.status})`
+          );
+        }
 
         const datos = await respuesta.json();
         renderizar(datos);
-        estado.textContent = `Cotizaciones cargadas correctamente · ${new Date().toLocaleString("es-AR")}`;
+
+        estado.textContent =
+          `Cotizaciones cargadas correctamente · ${new Date().toLocaleString("es-AR")}`;
       } catch (error) {
         console.error("Error al cargar cotizaciones:", error);
-        estado.textContent = "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json.";
+
+        estado.textContent =
+          "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json.";
+
         const aviso = document.getElementById("aviso");
-        aviso.textContent = "No fue posible actualizar los datos. Verificá que cotizaciones.json exista y contenga JSON válido.";
+        aviso.textContent =
+          "No fue posible actualizar los datos. Verificá que cotizaciones.json exista y contenga JSON válido.";
         aviso.hidden = false;
       } finally {
         boton.disabled = false;
@@ -440,8 +559,12 @@
       }
     }
 
-    document.getElementById("actualizar").addEventListener("click", cargarCotizaciones);
+    document
+      .getElementById("actualizar")
+      .addEventListener("click", cargarCotizaciones);
+
     cargarCotizaciones();
   </script>
 </body>
 </html>
+1
