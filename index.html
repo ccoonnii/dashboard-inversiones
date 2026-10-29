@@ -1,819 +1,924 @@
+HTML
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f8f6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f7f2">
   <title>Cartera de inversiones de Constanza</title>
 
   <style>
     :root {
-      color-scheme: light;
-      --bg: #f5f8f6;
-      --card: #ffffff;
-      --text: #202b25;
-      --muted: #718078;
-      --accent: #267653;
-      --accent-light: #e7f4ec;
-      --border: #e3eae5;
-      --positive: #16834a;
-      --negative: #d14343;
-      --shadow: 0 5px 22px rgba(31, 64, 45, .055);
+      --fondo: #f5f7f2;
+      --tarjeta: #ffffff;
+      --texto: #202820;
+      --secundario: #69746b;
+      --verde: #24734d;
+      --verde-claro: #e5f3e9;
+      --rojo: #bd4141;
+      --rojo-claro: #fbeaea;
+      --borde: #e5eae3;
+      --dorado: #c79b46;
+      --sombra: 0 8px 28px rgba(31, 55, 37, 0.06);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Arial, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       line-height: 1.5;
     }
 
-    button { font: inherit; }
+    button {
+      font: inherit;
+    }
 
-    .container {
-      width: min(1120px, 100% - 32px);
+    .contenedor {
+      width: min(1120px, 92%);
       margin: 0 auto;
-      padding: 30px 0 45px;
+      padding: 30px 0 48px;
     }
 
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 18px;
-      margin-bottom: 26px;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
     }
 
-    .eyebrow {
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.6px;
+    .marca {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      color: white;
+      background: var(--verde);
+      font-size: 24px;
+    }
+
+    h1, h2, p {
+      margin-top: 0;
     }
 
     h1 {
-      margin: 5px 0;
-      font-size: clamp(25px, 4vw, 36px);
-      line-height: 1.15;
-      letter-spacing: -1px;
+      margin-bottom: 3px;
+      font-size: clamp(23px, 4vw, 34px);
+      line-height: 1.2;
     }
 
     h2 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: -.3px;
+      margin-bottom: 5px;
+      font-size: 19px;
     }
 
-    h3 { margin: 0; font-size: 15px; }
+    .subtitulo, .muted {
+      color: var(--secundario);
+    }
 
-    p { margin: 0; }
-
-    .subtitle {
-      color: var(--muted);
+    .subtitulo {
+      margin: 0;
       font-size: 14px;
     }
 
-    .header-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      padding: 9px 14px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: var(--card);
-      color: var(--text);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-    .button.primary {
+    .boton {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 16px;
+      background: var(--verde);
       color: white;
-      background: var(--accent);
-      border-color: var(--accent);
+      font-weight: 650;
+      cursor: pointer;
+      transition: transform .15s, opacity .15s;
+      white-space: nowrap;
     }
 
-    .button:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
+    .boton:hover {
+      transform: translateY(-1px);
+      opacity: .92;
     }
 
-    .grid {
+    .boton:disabled {
+      cursor: wait;
+      opacity: .6;
+      transform: none;
+    }
+
+    .panel {
+      background: var(--tarjeta);
+      border: 1px solid var(--borde);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--sombra);
+    }
+
+    .resumen {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
       margin-bottom: 22px;
     }
 
-    .card {
-      min-width: 0;
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      animation: appear .45s ease both;
-    }
-
-    .metric-label {
-      color: var(--muted);
+    .etiqueta {
+      color: var(--secundario);
       font-size: 13px;
-      font-weight: 600;
+      margin-bottom: 8px;
     }
 
-    .metric-value {
-      display: block;
-      margin: 9px 0 5px;
+    .numero {
       font-size: clamp(23px, 3vw, 31px);
-      font-weight: 800;
-      letter-spacing: -1px;
+      font-weight: 750;
+      letter-spacing: -.7px;
       overflow-wrap: anywhere;
     }
 
-    .metric-note {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .positive { color: var(--positive) !important; }
-    .negative { color: var(--negative) !important; }
-    .muted { color: var(--muted); }
-
-    .section {
-      margin-top: 20px;
-      padding: 22px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      animation: appear .5s ease both;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .section-heading p {
-      margin-top: 4px;
-      color: var(--muted);
+    .detalle {
+      margin-top: 7px;
+      color: var(--secundario);
       font-size: 13px;
     }
 
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--muted);
-      font-size: 12px;
+    .positivo {
+      color: var(--verde);
     }
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #b7c2bb;
+    .negativo {
+      color: var(--rojo);
     }
 
-    .dot.ok { background: var(--positive); }
-    .dot.error { background: var(--negative); }
+    .neutro {
+      color: var(--secundario);
+    }
 
-    .table-wrap { overflow-x: auto; }
+    .seccion {
+      margin-top: 26px;
+    }
+
+    .encabezado-seccion {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+
+    .encabezado-seccion p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--secundario);
+    }
+
+    .tabla-contenedor {
+      overflow-x: auto;
+      border-radius: 14px;
+    }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      white-space: nowrap;
-      font-size: 13px;
+      min-width: 720px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 15px 13px;
+      border-bottom: 1px solid var(--borde);
+      vertical-align: middle;
     }
 
     th {
-      padding: 12px 14px;
-      background: #f7faf8;
-      color: var(--muted);
-      text-align: right;
-      font-size: 11px;
+      color: var(--secundario);
+      background: #fafbf9;
+      font-size: 12px;
+      font-weight: 650;
       text-transform: uppercase;
-      letter-spacing: .6px;
+      letter-spacing: .35px;
     }
 
     td {
-      padding: 15px 14px;
-      border-bottom: 1px solid var(--border);
-      text-align: right;
+      font-size: 14px;
     }
 
-    th:first-child, td:first-child { text-align: left; }
-    tbody tr:last-child td { border-bottom: 0; }
-
-    tbody tr { transition: background .2s ease; }
-    tbody tr:hover { background: #f8fbf9; }
-
-    .asset {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-align: left;
+    tbody tr:last-child td {
+      border-bottom: 0;
     }
 
-    .asset-icon {
-      display: grid;
-      width: 36px;
-      height: 36px;
-      flex: 0 0 36px;
-      place-items: center;
-      border-radius: 11px;
-      background: var(--accent-light);
-      color: var(--accent);
+    .activo {
+      font-weight: 750;
+      font-size: 15px;
+    }
+
+    .tipo {
+      display: inline-block;
+      margin-top: 4px;
+      color: var(--secundario);
       font-size: 12px;
-      font-weight: 800;
     }
 
-    .asset-name { font-weight: 750; }
-    .asset-type { color: var(--muted); font-size: 11px; }
+    .resultado {
+      font-weight: 750;
+    }
 
-    .charts {
+    .insignia {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .insignia.positivo {
+      background: var(--verde-claro);
+    }
+
+    .insignia.negativo {
+      background: var(--rojo-claro);
+    }
+
+    .insignia.neutro {
+      background: #eef0ed;
+    }
+
+    .cripto-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
-    .chart-card {
-      min-width: 0;
-      padding: 18px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
+    .cripto-precio {
+      font-size: 26px;
+      font-weight: 750;
+      margin: 13px 0 5px;
+      overflow-wrap: anywhere;
     }
 
-    .chart-card h3 { margin-bottom: 14px; }
-
-    .chart-area {
-      position: relative;
-      min-height: 220px;
-      display: grid;
+    .simbolo-cripto {
+      display: inline-grid;
       place-items: center;
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      max-width: 390px;
-      height: 220px;
-    }
-
-    .distribution-list {
-      display: grid;
-      gap: 12px;
-      width: 100%;
-    }
-
-    .distribution-row {
-      display: grid;
-      grid-template-columns: minmax(60px, .8fr) 2fr auto;
-      align-items: center;
-      gap: 10px;
-      font-size: 12px;
-    }
-
-    .track {
-      height: 8px;
-      overflow: hidden;
-      border-radius: 20px;
-      background: #edf2ee;
-    }
-
-    .bar {
-      height: 100%;
-      border-radius: inherit;
-      background: var(--accent);
-      transition: width .6s ease;
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 14px;
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .legend-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 3px;
-    }
-
-    .notice {
-      padding: 13px 15px;
+      width: 39px;
+      height: 39px;
       border-radius: 12px;
-      background: #f3f7f4;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 14px;
+      background: #f4eee0;
+      color: #8d6b27;
+      font-weight: 800;
+      margin-right: 9px;
     }
 
-    .message {
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: #fff8e8;
-      color: #795b17;
-      font-size: 12px;
-      margin-top: 14px;
-      display: none;
-    }
-
-    .message.show { display: block; }
-
-    footer {
+    .cripto-titulo {
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 24px;
-      color: var(--muted);
+      align-items: center;
+      font-weight: 750;
+    }
+
+    .nota {
+      margin-top: 22px;
+      padding: 15px 17px;
+      border-radius: 14px;
+      background: #eef3eb;
+      color: #48574a;
+      font-size: 13px;
+    }
+
+    .estado {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--secundario);
+      font-size: 13px;
+    }
+
+    .pie {
+      margin-top: 28px;
+      text-align: center;
+      color: var(--secundario);
       font-size: 12px;
     }
 
-    footer a { color: var(--accent); text-decoration: none; }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(7px); }
-      to { opacity: 1; transform: translateY(0); }
+    .enlace {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--verde);
+      font-weight: 700;
+      text-decoration: none;
     }
 
-    @media (max-width: 760px) {
-      .container { width: calc(100% - 22px); padding-top: 22px; }
-      header { align-items: flex-start; flex-direction: column; }
-      .grid { grid-template-columns: 1fr; gap: 11px; }
-      .card { padding: 17px; }
-      .metric-value { font-size: 27px; }
-      .section { padding: 15px; }
-      .charts { grid-template-columns: 1fr; }
-      .chart-area { min-height: 200px; }
-      canvas { height: 200px; }
+    .enlace:hover {
+      text-decoration: underline;
+    }
+
+    .aviso {
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      background: #fff5df;
+      color: #76571c;
+      border: 1px solid #f0dfb5;
+      border-radius: 13px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 720px) {
+      .contenedor {
+        width: 94%;
+        padding-top: 20px;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      .resumen {
+        grid-template-columns: 1fr;
+      }
+
+      .resumen .panel {
+        padding: 18px;
+      }
+
+      .numero {
+        font-size: 28px;
+      }
+
+      .panel {
+        padding: 17px;
+        border-radius: 16px;
+      }
+
+      .cripto-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .boton {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-        scroll-behavior: auto !important;
+        transition: none !important;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
+  <main class="contenedor">
     <header>
-      <div>
-        <div class="eyebrow">Panel personal</div>
-        <h1>Cartera de inversiones de Constanza</h1>
-        <p class="subtitle">Seguimiento de tus inversiones en un solo lugar.</p>
+      <div class="marca">
+        <div class="logo" aria-hidden="true">↗</div>
+        <div>
+          <h1>Cartera de inversiones de Constanza</h1>
+          <p class="subtitulo">Seguimiento de activos y evolución de la cartera</p>
+        </div>
       </div>
-      <div class="header-actions">
-        <button class="button" id="refreshButton" type="button">↻ Actualizar</button>
-        <a class="button primary" href="https://app.cocos.capital/" target="_blank" rel="noopener noreferrer">
-          Cocos Capital ↗
-        </a>
-      </div>
+
+      <button id="actualizar" class="boton" type="button">
+        ↻ Actualizar
+      </button>
     </header>
 
-    <section class="grid" aria-label="Resumen de cartera">
-      <article class="card">
-        <div class="metric-label">Valor actual calculado</div>
-        <strong class="metric-value" id="portfolioValue">—</strong>
-        <div class="metric-note">Solo activos con moneda y precio verificables</div>
+    <div id="aviso" class="aviso" hidden></div>
+
+    <section class="resumen" aria-label="Resumen de la cartera">
+      <article class="panel">
+        <div class="etiqueta">Valor actual de la cartera</div>
+        <div id="valor-cartera" class="numero">—</div>
+        <div class="detalle">Suma de los activos con cotización disponible</div>
       </article>
-      <article class="card">
-        <div class="metric-label">Resultado estimado</div>
-        <strong class="metric-value" id="portfolioResult">—</strong>
-        <div class="metric-note" id="portfolioResultNote">Pendiente de validar los datos</div>
+
+      <article class="panel">
+        <div class="etiqueta">Capital invertido</div>
+        <div id="capital-invertido" class="numero">—</div>
+        <div class="detalle">Costo de compra registrado</div>
       </article>
-      <article class="card">
-        <div class="metric-label">Cotizaciones</div>
-        <strong class="metric-value" id="quoteStatus">—</strong>
-        <div class="metric-note" id="lastUpdated">Esperando actualización</div>
+
+      <article class="panel">
+        <div class="etiqueta">Resultado estimado</div>
+        <div id="resultado-total" class="numero">—</div>
+        <div id="resultado-porcentaje" class="detalle">
+          Esperando cotizaciones…
+        </div>
       </article>
     </section>
 
-    <section class="section">
-      <div class="section-heading">
+    <section class="panel">
+      <div class="encabezado-seccion">
         <div>
-          <h2>Mis activos</h2>
-          <p>Precios y posiciones registradas</p>
+          <h2>Mi cartera</h2>
+          <p>Posiciones registradas y resultado estimado por activo</p>
         </div>
-        <span class="status"><span class="dot" id="statusDot"></span><span id="statusText">Conectando...</span></span>
       </div>
 
-      <div class="table-wrap">
+      <div class="tabla-contenedor">
         <table>
           <thead>
             <tr>
               <th>Activo</th>
               <th>Cantidad</th>
               <th>Precio actual</th>
-              <th>Variación diaria</th>
               <th>Valor actual</th>
+              <th>Costo de compra</th>
               <th>Resultado</th>
             </tr>
           </thead>
-          <tbody id="assetsTable">
-            <tr><td colspan="6" class="muted">Cargando cotizaciones...</td></tr>
+          <tbody id="tabla-activos">
+            <tr>
+              <td colspan="6">Cargando cotizaciones…</td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <div class="message" id="dataMessage"></div>
-      <div class="notice">
-        Los resultados se muestran únicamente cuando los datos permiten una comparación coherente.
-        Revisá los importes y las monedas antes de tomar decisiones.
+      <div id="estado" class="estado" role="status" aria-live="polite">
+        Preparando actualización…
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-heading">
+    <section class="seccion">
+      <div class="encabezado-seccion">
         <div>
-          <h2>Distribución y evolución</h2>
-          <p>Visualización del valor de los activos disponibles</p>
+          <h2>Mercado cripto</h2>
+          <p>Precios de referencia; no se suman a tu cartera</p>
         </div>
       </div>
 
-      <div class="charts">
-        <article class="chart-card">
-          <h3>Distribución de la cartera</h3>
-          <div class="chart-area">
-            <div id="distribution" class="distribution-list">
-              <p class="muted">Esperando cotizaciones...</p>
+      <div class="cripto-grid">
+        <article class="panel">
+          <div class="cripto-titulo">
+            <span class="simbolo-cripto">₿</span>
+            <div>
+              Bitcoin
+              <div class="subtitulo">BTC / USDT</div>
             </div>
           </div>
+          <div id="precio-btc" class="cripto-precio">—</div>
+          <div id="variacion-btc" class="detalle">Esperando cotización…</div>
         </article>
-        <article class="chart-card">
-          <h3>Valor por activo</h3>
-          <div class="chart-area">
-            <canvas id="valueChart" aria-label="Gráfico del valor por activo"></canvas>
-          </div>
-          <div id="chartLegend" class="legend"></div>
-        </article>
-      </div>
 
-      <div class="notice">
-        El gráfico de barras compara los valores actuales disponibles. Para mostrar una evolución
-        histórica real necesitaremos guardar una serie de registros a lo largo del tiempo.
+        <article class="panel">
+          <div class="cripto-titulo">
+            <span class="simbolo-cripto">Ξ</span>
+            <div>
+              Ethereum
+              <div class="subtitulo">ETH / USDT</div>
+            </div>
+          </div>
+          <div id="precio-eth" class="cripto-precio">—</div>
+          <div id="variacion-eth" class="detalle">Esperando cotización…</div>
+        </article>
       </div>
     </section>
 
-    <footer>
-      <span>Dashboard personal · Datos de referencia</span>
-      <span>Última consulta: <span id="footerUpdated">—</span></span>
+    <div class="nota">
+      <strong>Importante:</strong> el resultado es una estimación basada en
+      las cotizaciones recibidas y los costos cargados. No incluye comisiones,
+      impuestos ni posibles diferencias entre el precio de referencia y el
+      precio de compra o venta en el bróker. Revisá siempre la moneda de cada
+      cotización antes de tomar decisiones.
+    </div>
+
+    <div style="text-align:center">
+      <a
+        class="enlace"
+        href="https://app.cocos.capital/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Abrir Cocos Capital ↗
+      </a>
+    </div>
+
+    <footer class="pie">
+      <div id="ultima-actualizacion">Última actualización: pendiente</div>
+      <div>Dashboard personal · Datos de cotización desde cotizaciones.json</div>
     </footer>
   </main>
 
   <script>
     "use strict";
 
-    // Costos totales registrados de las posiciones.
-    // Se mantienen separados hasta verificar su moneda y la moneda de cotización.
+    /*
+      POSICIONES REGISTRADAS
+
+      Los costos son los importes totales de compra registrados.
+      Se asume que las cotizaciones de estos activos están en USD por unidad.
+      Si el proveedor devuelve otra moneda, hay que corregir esa equivalencia
+      antes de considerar definitivo el resultado.
+    */
+
     const cartera = [
-      { symbol: "SPY", name: "SPY", type: "CEDEAR", quantity: 5, costTotal: 66.10, costCurrency: "USD" },
-      { symbol: "XPD", name: "XPD", type: "CEDEAR", quantity: 26, costTotal: 109.20, costCurrency: "USD" },
-      { symbol: "EWZD", name: "EWZD · Brasil", type: "CEDEAR", quantity: 17, costTotal: 303.72, costCurrency: "USD" },
-      { symbol: "NUD", name: "NUD", type: "CEDEAR", quantity: 7, costTotal: 46.20, costCurrency: "USD" },
-      { symbol: "BTCUSDT", name: "Bitcoin", type: "Cripto · referencia", quantity: 0, costTotal: null, costCurrency: "USD" },
-      { symbol: "ETHUSDT", name: "Ethereum", type: "Cripto · referencia", quantity: 0, costTotal: null, costCurrency: "USD" }
+      {
+        symbol: "SPY",
+        nombre: "SPY",
+        tipo: "CEDEAR",
+        quantity: 5,
+        costTotal: 66.10
+      },
+      {
+        symbol: "XPD",
+        nombre: "XPD",
+        tipo: "CEDEAR",
+        quantity: 26,
+        costTotal: 109.20
+      },
+      {
+        symbol: "EWZD",
+        nombre: "EWZD",
+        tipo: "CEDEAR",
+        quantity: 17,
+        costTotal: 303.72
+      },
+      {
+        symbol: "NUD",
+        nombre: "NUD",
+        tipo: "CEDEAR",
+        quantity: 7,
+        costTotal: 46.20
+      }
     ];
 
-    const colores = ["#267653", "#72a78b", "#a8cbb7", "#d3e6da", "#8c9b91", "#d8b875"];
-    const monedaUSD = new Intl.NumberFormat("es-AR", {
-      style: "currency", currency: "USD", maximumFractionDigits: 2
+    const formatoUSD = new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
-    const numero = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
 
-    let ultimoDatos = null;
+    const formatoPrecio = new Intl.NumberFormat("es-AR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4
+    });
 
-    function formatoUSD(valor) {
-      return Number.isFinite(valor) ? monedaUSD.format(valor) : "—";
+    const formatoPorcentaje = new Intl.NumberFormat("es-AR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    function numeroValido(valor) {
+      if (valor === null || valor === undefined || valor === "") {
+        return null;
+      }
+
+      const numero = Number(valor);
+      return Number.isFinite(numero) ? numero : null;
     }
 
-    function formatoPrecio(valor, currency) {
-      if (!Number.isFinite(valor)) return "Sin dato";
-      if (currency === "USD") return formatoUSD(valor);
-      if (currency === "ARS") {
-        return new Intl.NumberFormat("es-AR", {
-          style: "currency", currency: "ARS", maximumFractionDigits: 2
-        }).format(valor);
+    function obtenerRegistro(datos, simbolo) {
+      if (!datos || typeof datos !== "object") {
+        return null;
       }
-      return numero.format(valor);
-    }
 
-    function numeroValido(value) {
-      if (typeof value === "number") return Number.isFinite(value) ? value : null;
-      if (typeof value === "string" && value.trim() !== "") {
-        const parsed = Number(value.replace(",", "."));
-        return Number.isFinite(parsed) ? parsed : null;
+      // Acepta cotizaciones.json con los símbolos como claves principales.
+      if (Object.prototype.hasOwnProperty.call(datos, simbolo)) {
+        return datos[simbolo];
       }
+
+      // También acepta formatos que agrupen los activos dentro de "data".
+      if (
+        datos.data &&
+        typeof datos.data === "object" &&
+        Object.prototype.hasOwnProperty.call(datos.data, simbolo)
+      ) {
+        return datos.data[simbolo];
+      }
+
       return null;
     }
 
-    // Acepta formatos comunes, pero el esquema real de cotizaciones.json
-    // debe comprobarse para confirmar la moneda de cada símbolo.
     function extraerCotizacion(raw) {
       if (typeof raw === "number" || typeof raw === "string") {
-        const precio = numeroValido(raw);
-        return { precio, moneda: null, variacion: null };
+        return {
+          precio: numeroValido(raw),
+          moneda: null,
+          variacion: null,
+          actualizado: null
+        };
       }
 
       if (!raw || typeof raw !== "object") {
-        return { precio: null, moneda: null, variacion: null };
+        return {
+          precio: null,
+          moneda: null,
+          variacion: null,
+          actualizado: null
+        };
       }
 
       const precio = numeroValido(
-        raw.precio ?? raw.price ?? raw.last ?? raw.close ??
-        raw.cotizacion ?? raw.ultimo ?? raw.value
+        raw.precio ??
+        raw.price ??
+        raw.last ??
+        raw.close ??
+        raw.cotizacion ??
+        raw.ultimo ??
+        raw.value
       );
 
       const variacion = numeroValido(
-        raw.variacion_24h_pct ?? raw.variacion_pct ??
-        raw.change_percent ?? raw.changePercent ?? raw.porcentaje
+        raw.variacion_24h_pct ??
+        raw.variacion_pct ??
+        raw.change_percent ??
+        raw.changePercent ??
+        raw.porcentaje
       );
 
-      const moneda = String(
-        raw.moneda ?? raw.currency ?? raw.divisa ?? ""
-      ).toUpperCase();
+      const monedaInformada = String(
+        raw.moneda ??
+        raw.currency ??
+        raw.divisa ??
+        ""
+      ).trim().toUpperCase();
+
+      const moneda = ["USD", "ARS", "USDT"].includes(monedaInformada)
+        ? monedaInformada
+        : null;
 
       return {
         precio,
-        moneda: ["USD", "ARS"].includes(moneda) ? moneda : null,
-        variacion
+        moneda,
+        variacion,
+        actualizado: raw.actualizado ?? raw.updated_at ?? null
       };
     }
 
-    function obtenerRegistro(datos, symbol) {
-      if (!datos || typeof datos !== "object") return null;
-
-      const claves = {
-        SPY: ["SPY", "SPY.BA"],
-        XPD: ["XPD"],
-        EWZD: ["EWZD"],
-        NUD: ["NUD"],
-        BTCUSDT: ["BTCUSDT", "BTC"],
-        ETHUSDT: ["ETHUSDT", "ETH"]
-      }[symbol] || [symbol];
-
-      for (const clave of claves) {
-        if (datos[clave] !== undefined) return datos[clave];
-      }
-
-      if (datos.cotizaciones && typeof datos.cotizaciones === "object") {
-        for (const clave of claves) {
-          if (datos.cotizaciones[clave] !== undefined) return datos.cotizaciones[clave];
-        }
-      }
-
-      return null;
+    function escaparHTML(valor) {
+      return String(valor).replace(/[&<>"']/g, caracter => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[caracter]);
     }
 
-    function dibujarDistribucion(activos) {
-      const contenedor = document.getElementById("distribution");
-      const validos = activos.filter(a => a.valorUSD !== null && a.valorUSD > 0);
-      const total = validos.reduce((sum, a) => sum + a.valorUSD, 0);
-
-      if (!validos.length || total <= 0) {
-        contenedor.innerHTML = '<p class="muted">No hay valores comparables en USD para mostrar.</p>';
-        return;
-      }
-
-      contenedor.innerHTML = validos.map(a => {
-        const porcentaje = a.valorUSD / total * 100;
-        return `
-          <div class="distribution-row">
-            <span>${a.symbol}</span>
-            <div class="track"><div class="bar" style="width:${porcentaje}%;background:${colores[cartera.findIndex(c => c.symbol === a.symbol) % colores.length]}"></div></div>
-            <strong>${porcentaje.toFixed(1)}%</strong>
-          </div>`;
-      }).join("");
+    function mostrarDinero(valor) {
+      return Number.isFinite(valor) ? formatoUSD.format(valor) : "—";
     }
 
-    function dibujarGrafico(activos) {
-      const canvas = document.getElementById("valueChart");
-      const ctx = canvas.getContext("2d");
-      const validos = activos.filter(a => a.valorUSD !== null && a.valorUSD > 0);
-      const legend = document.getElementById("chartLegend");
+    function mostrarPrecio(valor) {
+      return Number.isFinite(valor) ? formatoPrecio.format(valor) : "—";
+    }
 
-      const ratio = window.devicePixelRatio || 1;
-      const width = canvas.clientWidth || 320;
-      const height = 220;
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      ctx.clearRect(0, 0, width, height);
+    function claseResultado(valor) {
+      if (!Number.isFinite(valor)) return "neutro";
+      if (valor > 0.000001) return "positivo";
+      if (valor < -0.000001) return "negativo";
+      return "neutro";
+    }
 
-      if (!validos.length) {
-        ctx.fillStyle = "#718078";
-        ctx.font = "13px sans-serif";
-        ctx.fillText("Sin valores comparables", 12, 105);
-        legend.innerHTML = "";
-        return;
+    function textoResultado(valor) {
+      if (!Number.isFinite(valor)) return "Sin dato";
+      if (valor > 0.000001) return "Ganancia";
+      if (valor < -0.000001) return "Pérdida";
+      return "Sin variación";
+    }
+
+    function mostrarVariacion(valor) {
+      if (!Number.isFinite(valor)) {
+        return '<span class="insignia neutro">Sin variación disponible</span>';
       }
 
-      const max = Math.max(...validos.map(a => a.valorUSD));
-      const padding = { left: 12, right: 12, top: 12, bottom: 42 };
-      const usableW = width - padding.left - padding.right;
-      const usableH = height - padding.top - padding.bottom;
-      const slot = usableW / validos.length;
-      const barW = Math.min(42, slot * .55);
+      const clase = claseResultado(valor);
+      const signo = valor > 0 ? "+" : "";
 
-      ctx.strokeStyle = "#e3eae5";
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 4; i++) {
-        const y = padding.top + usableH * i / 3;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(width - padding.right, y);
-        ctx.stroke();
-      }
+      return `<span class="insignia ${clase}">${signo}${formatoPorcentaje.format(valor)}%</span>`;
+    }
 
-      validos.forEach((a, i) => {
-        const barH = max > 0 ? (a.valorUSD / max) * usableH : 0;
-        const x = padding.left + slot * i + (slot - barW) / 2;
-        const y = padding.top + usableH - barH;
+    function formatearFecha(fecha) {
+      if (!fecha) return null;
 
-        ctx.fillStyle = colores[cartera.findIndex(c => c.symbol === a.symbol) % colores.length];
-        ctx.beginPath();
-        ctx.roundRect(x, y, barW, Math.max(0, barH), 5);
-        ctx.fill();
+      const valor = new Date(fecha);
+      if (Number.isNaN(valor.getTime())) return null;
 
-        ctx.fillStyle = "#526158";
-        ctx.font = "11px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(a.symbol, x + barW / 2, height - 19);
+      return valor.toLocaleString("es-AR", {
+        dateStyle: "short",
+        timeStyle: "short"
       });
+    }
 
-      legend.innerHTML = validos.map(a => {
-        const color = colores[cartera.findIndex(c => c.symbol === a.symbol) % colores.length];
-        return `<span class="legend-item"><span class="legend-dot" style="background:${color}"></span>${a.symbol}: ${formatoUSD(a.valorUSD)}</span>`;
-      }).join("");
+    function actualizarResumen(id, valor, clase = "") {
+      const elemento = document.getElementById(id);
+      elemento.textContent = valor;
+      elemento.className = "numero " + clase;
     }
 
     function renderizar(datos) {
-      const activos = cartera.map(c => {
-        const raw = obtenerRegistro(datos, c.symbol);
+      const aviso = document.getElementById("aviso");
+      const cuerpo = document.getElementById("tabla-activos");
+
+      aviso.hidden = true;
+
+      let capitalInvertido = 0;
+      let valorCartera = 0;
+      let posicionesValuadas = 0;
+      let filas = [];
+      let fechas = [];
+
+      for (const activo of cartera) {
+        capitalInvertido += activo.costTotal;
+
+        const raw = obtenerRegistro(datos, activo.symbol);
         const q = extraerCotizacion(raw);
-        const moneda = q.moneda;
-        let valorUSD = null;
-        let resultadoUSD = null;
 
-        // Solo se calcula el valor en USD si el archivo identifica la moneda.
-        if (Number.isFinite(q.precio) && moneda === "USD" && c.quantity > 0) {
-          valorUSD = q.precio * c.quantity;
+        /*
+          Los datos actuales de cotizaciones.json no incluyen "moneda"
+          en todos los registros. Para los activos de la cartera se
+          interpreta el precio como USD, según lo que veníamos revisando.
+          Si la cotización no está realmente en USD, este cálculo no sirve
+          hasta corregir la conversión.
+        */
+        const moneda = q.moneda || "USD";
+        const precioValido =
+          Number.isFinite(q.precio) &&
+          q.precio >= 0 &&
+          moneda === "USD";
+
+        let valorActual = null;
+        let resultado = null;
+        let resultadoPct = null;
+
+        if (precioValido && activo.quantity > 0) {
+          valorActual = q.precio * activo.quantity;
+          resultado = valorActual - activo.costTotal;
+          resultadoPct = activo.costTotal > 0
+            ? (resultado / activo.costTotal) * 100
+            : null;
+
+          valorCartera += valorActual;
+          posicionesValuadas++;
         }
 
-        // Compara solo si el costo está expresado en USD y la cotización también.
-        if (valorUSD !== null && Number.isFinite(c.costTotal)) {
-          resultadoUSD = valorUSD - c.costTotal;
-        }
+        const fecha = formatearFecha(q.actualizado);
+        if (fecha) fechas.push(fecha);
 
-        return {
-          ...c,
-          precio: q.precio,
-          moneda,
-          variacion: q.variacion,
-          valorUSD,
-          resultadoUSD
-        };
-      });
+        const precioTexto = precioValido
+          ? `${mostrarPrecio(q.precio)} USD`
+          : "Sin cotización USD";
 
-      const conValor = activos.filter(a => a.valorUSD !== null);
-      const totalUSD = conValor.reduce((s, a) => s + a.valorUSD, 0);
-      const resultados = activos.filter(a => a.resultadoUSD !== null);
-      const resultadoTotal = resultados.reduce((s, a) => s + a.resultadoUSD, 0);
+        const resultadoHTML = resultado === null
+          ? '<span class="insignia neutro">Sin dato</span>'
+          : `<div class="resultado ${claseResultado(resultado)}">${mostrarDinero(resultado)}</div>
+             <div class="detalle">${mostrarVariacion(resultadoPct)}</div>`;
 
-      document.getElementById("portfolioValue").textContent =
-        conValor.length ? formatoUSD(totalUSD) : "Pendiente";
-      document.getElementById("portfolioResult").textContent =
-        resultados.length ? formatoUSD(resultadoTotal) : "Pendiente";
-      document.getElementById("portfolioResult").className =
-        "metric-value " + (resultadoTotal >= 0 ? "positive" : "negative");
-      document.getElementById("portfolioResultNote").textContent =
-        resultados.length
-          ? "Estimación sobre activos con precio y moneda USD identificados"
-          : "Necesitamos verificar las monedas de las cotizaciones";
+        filas.push(`
+          <tr>
+            <td>
+              <div class="activo">${escaparHTML(activo.nombre)}</div>
+              <span class="tipo">${escaparHTML(activo.tipo)}</span>
+            </td>
+            <td>${activo.quantity}</td>
+            <td>${precioTexto}</td>
+            <td>${mostrarDinero(valorActual)}</td>
+            <td>${mostrarDinero(activo.costTotal)}</td>
+            <td>${resultadoHTML}</td>
+          </tr>
+        `);
+      }
 
-      const tbody = document.getElementById("assetsTable");
-      tbody.innerHTML = activos.map(a => {
-        const idx = cartera.findIndex(c => c.symbol === a.symbol);
-        const precio = a.precio === null ? "Sin dato" : formatoPrecio(a.precio, a.moneda);
-        const variacion = a.variacion === null
-          ? "—"
-          : `${a.variacion > 0 ? "+" : ""}${a.variacion.toFixed(2)}%`;
-        const variacionClass = a.variacion === null ? "muted" : (a.variacion >= 0 ? "positive" : "negative");
-        const valor = a.valorUSD === null ? "—" : formatoUSD(a.valorUSD);
-        const resultado = a.resultadoUSD === null ? "—" : formatoUSD(a.resultadoUSD);
-        const resultadoClass = a.resultadoUSD === null ? "muted" : (a.resultadoUSD >= 0 ? "positive" : "negative");
+      cuerpo.innerHTML = filas.join("");
 
-        return `<tr>
-          <td><div class="asset">
-            <div class="asset-icon">${a.symbol.slice(0, 3)}</div>
-            <div><div class="asset-name">${a.name}</div><div class="asset-type">${a.type}</div></div>
-          </div></td>
-          <td>${a.quantity > 0 ? a.quantity : "Referencia"}</td>
-          <td>${precio}</td>
-          <td class="${variacionClass}">${variacion}</td>
-          <td>${valor}</td>
-          <td class="${resultadoClass}">${resultado}</td>
-        </tr>`;
-      }).join("");
+      if (posicionesValuadas === cartera.length) {
+        const resultadoTotal = valorCartera - capitalInvertido;
+        const porcentajeTotal = capitalInvertido > 0
+          ? (resultadoTotal / capitalInvertido) * 100
+          : null;
 
-      dibujarDistribucion(activos);
-      dibujarGrafico(activos);
+        actualizarResumen(
+          "valor-cartera",
+          mostrarDinero(valorCartera)
+        );
 
-      const conPrecio = activos.filter(a => a.precio !== null).length;
-      document.getElementById("quoteStatus").textContent = `${conPrecio}/${activos.length}`;
-      document.getElementById("lastUpdated").textContent =
-        "Consulta: " + new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+        actualizarResumen(
+          "capital-invertido",
+          mostrarDinero(capitalInvertido)
+        );
 
-      const updated = new Date().toLocaleString("es-AR");
-      document.getElementById("footerUpdated").textContent = updated;
-      document.getElementById("statusDot").className = "dot " + (conPrecio ? "ok" : "error");
-      document.getElementById("statusText").textContent =
-        conPrecio ? "Archivo leído" : "Sin cotizaciones";
+        actualizarResumen(
+          "resultado-total",
+          mostrarDinero(resultadoTotal),
+          claseResultado(resultadoTotal)
+        );
 
-      const missingCurrency = activos.some(a => a.precio !== null && !a.moneda);
-      const message = document.getElementById("dataMessage");
-      if (missingCurrency) {
-        message.textContent =
-          "Las cotizaciones están disponibles, pero el archivo no identifica la moneda para todos los precios. Por seguridad, el valor total y los resultados se calculan solo con precios identificados en USD.";
-        message.classList.add("show");
+        document.getElementById("resultado-porcentaje").innerHTML =
+          `${mostrarVariacion(porcentajeTotal)} · ${textoResultado(resultadoTotal)}`;
       } else {
-        message.textContent = "";
-        message.classList.remove("show");
+        actualizarResumen(
+          "valor-cartera",
+          mostrarDinero(valorCartera)
+        );
+
+        actualizarResumen(
+          "capital-invertido",
+          mostrarDinero(capitalInvertido)
+        );
+
+        actualizarResumen("resultado-total", "Parcial", "neutro");
+
+        document.getElementById("resultado-porcentaje").textContent =
+          `Se pudieron valorar ${posicionesValuadas} de ${cartera.length} posiciones. Revisá las monedas y cotizaciones.`;
+
+        aviso.textContent =
+          "Atención: falta una cotización válida en USD para una o más posiciones. El resumen no muestra un resultado total definitivo.";
+        aviso.hidden = false;
+      }
+
+      renderizarCripto(datos, "BTCUSDT", "precio-btc", "variacion-btc");
+      renderizarCripto(datos, "ETHUSDT", "precio-eth", "variacion-eth");
+
+      const fechaMasReciente = datos && datos.actualizado
+        ? formatearFecha(datos.actualizado)
+        : null;
+
+      const fechasParseadas = fechas
+        .map(fecha => new Date(fecha))
+        .filter(fecha => !Number.isNaN(fecha.getTime()));
+
+      const fechaCotizaciones = fechasParseadas.length
+        ? new Date(Math.max(...fechasParseadas.map(fecha => fecha.getTime())))
+            .toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" })
+        : fechaMasReciente;
+
+      document.getElementById("ultima-actualizacion").textContent =
+        fechaCotizaciones
+          ? `Última cotización informada: ${fechaCotizaciones}`
+          : "Última cotización informada: fecha no disponible";
+    }
+
+    function renderizarCripto(datos, simbolo, idPrecio, idVariacion) {
+      const q = extraerCotizacion(obtenerRegistro(datos, simbolo));
+      const precioElemento = document.getElementById(idPrecio);
+      const variacionElemento = document.getElementById(idVariacion);
+
+      if (Number.isFinite(q.precio)) {
+        precioElemento.textContent = `${formatoPrecio.format(q.precio)} USDT`;
+      } else {
+        precioElemento.textContent = "Sin cotización";
+      }
+
+      if (Number.isFinite(q.variacion)) {
+        variacionElemento.innerHTML =
+          `Variación 24 h: ${mostrarVariacion(q.variacion)}`;
+      } else {
+        variacionElemento.textContent =
+          "Variación diaria no disponible";
       }
     }
 
-    async function actualizar() {
-      const button = document.getElementById("refreshButton");
-      button.disabled = true;
-      button.textContent = "Actualizando…";
+    async function cargarCotizaciones() {
+      const boton = document.getElementById("actualizar");
+      const estado = document.getElementById("estado");
+
+      boton.disabled = true;
+      boton.textContent = "Actualizando…";
+      estado.textContent = "Consultando cotizaciones…";
 
       try {
-        const response = await fetch("./cotizaciones.json?t=" + Date.now(), {
-          cache: "no-store"
-        });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const datos = await response.json();
-        ultimoDatos = datos;
+        const url = `./cotizaciones.json?t=${Date.now()}`;
+        const respuesta = await fetch(url, { cache: "no-store" });
+
+        if (!respuesta.ok) {
+          throw new Error(`No se pudo leer cotizaciones.json (HTTP ${respuesta.status})`);
+        }
+
+        const datos = await respuesta.json();
         renderizar(datos);
+
+        estado.textContent =
+          `Cotizaciones cargadas correctamente · ${new Date().toLocaleString("es-AR")}`;
       } catch (error) {
-        document.getElementById("statusDot").className = "dot error";
-        document.getElementById("statusText").textContent = "Error de conexión";
-        document.getElementById("assetsTable").innerHTML =
-          '<tr><td colspan="6">No se pudo leer cotizaciones.json. Comprobá que el archivo esté publicado.</td></tr>';
-        document.getElementById("dataMessage").textContent =
-          "Error al cargar los datos: " + error.message;
-        document.getElementById("dataMessage").classList.add("show");
+        console.error("Error al cargar las cotizaciones:", error);
+
+        estado.textContent =
+          "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json e intentá nuevamente.";
+
+        const aviso = document.getElementById("aviso");
+        aviso.textContent =
+          "No fue posible actualizar los datos. Verificá que cotizaciones.json exista en el repositorio y contenga JSON válido.";
+        aviso.hidden = false;
       } finally {
-        button.disabled = false;
-        button.textContent = "↻ Actualizar";
+        boton.disabled = false;
+        boton.textContent = "↻ Actualizar";
       }
     }
 
-    document.getElementById("refreshButton").addEventListener("click", actualizar);
+    document
+      .getElementById("actualizar")
+      .addEventListener("click", cargarCotizaciones);
 
-    let resizeTimer;
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (ultimoDatos) renderizar(ultimoDatos);
-      }, 150);
-    });
-
-    actualizar();
+    cargarCotizaciones();
   </script>
 </body>
 </html>
