@@ -2,506 +2,818 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0b1511">
-<title>Cartera de Constanza</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f8f6">
+  <title>Cartera de inversiones de Constanza</title>
 
-<style>
-:root {
-  color-scheme: dark;
-  --bg: #0b1511;
-  --card: #17271f;
-  --card-light: #1d3026;
-  --text: #f4f1e8;
-  --muted: #b6bdae;
-  --accent: #d5b46a;
-  --accent-light: #ead59a;
-  --line: #344638;
-  --positive: #76d5a2;
-  --negative: #f08e87;
-}
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f8f6;
+      --card: #ffffff;
+      --text: #202b25;
+      --muted: #718078;
+      --accent: #267653;
+      --accent-light: #e7f4ec;
+      --border: #e3eae5;
+      --positive: #16834a;
+      --negative: #d14343;
+      --shadow: 0 5px 22px rgba(31, 64, 45, .055);
+    }
 
-* { box-sizing: border-box; }
+    * { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: Arial, Helvetica, sans-serif;
-  background:
-    radial-gradient(ellipse at top, #1b3025 0%, transparent 55%),
-    var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Arial, sans-serif;
+      line-height: 1.5;
+    }
 
-main { max-width: 960px; margin: auto; }
+    button { font: inherit; }
 
-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 8px 0 26px;
-}
+    .container {
+      width: min(1120px, 100% - 32px);
+      margin: 0 auto;
+      padding: 30px 0 45px;
+    }
 
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #ead59a, #b58b3d);
-  color: #102017;
-  font-size: 25px;
-  font-weight: bold;
-}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
 
-h1 {
-  margin: 0;
-  font-size: clamp(23px, 5vw, 32px);
-  letter-spacing: -0.6px;
-}
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+    }
 
-h2 {
-  margin-top: 0;
-  font-size: 19px;
-  color: var(--accent-light);
-}
+    h1 {
+      margin: 5px 0;
+      font-size: clamp(25px, 4vw, 36px);
+      line-height: 1.15;
+      letter-spacing: -1px;
+    }
 
-.subtitle, .label, .muted, .note { color: var(--muted); }
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -.3px;
+    }
 
-.subtitle { margin: 3px 0 0; font-size: 13px; }
+    h3 { margin: 0; font-size: 15px; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 14px;
-}
+    p { margin: 0; }
 
-.card {
-  background: linear-gradient(145deg, var(--card-light), var(--card));
-  border: 1px solid var(--line);
-  border-radius: 17px;
-  padding: 20px;
-  margin: 14px 0;
-  box-shadow: 0 8px 24px #00000012;
-}
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-.summary-card { border-top: 2px solid var(--accent); }
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
 
-.label {
-  font-size: 13px;
-  letter-spacing: .2px;
-}
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--card);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
 
-.value {
-  font-size: clamp(21px, 4vw, 27px);
-  font-weight: bold;
-  color: var(--accent-light);
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-}
+    .button.primary {
+      color: white;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
 
-.note { font-size: 12px; line-height: 1.6; }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
 
-table { width: 100%; border-collapse: collapse; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
 
-th, td {
-  text-align: left;
-  padding: 13px 9px;
-  border-bottom: 1px solid var(--line);
-}
+    .card {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      animation: appear .45s ease both;
+    }
 
-th {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  color: var(--accent);
-}
+    .metric-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
 
-td { font-size: 14px; }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover { background: #ffffff05; }
-.table-wrap { overflow-x: auto; }
+    .metric-value {
+      display: block;
+      margin: 9px 0 5px;
+      font-size: clamp(23px, 3vw, 31px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      overflow-wrap: anywhere;
+    }
 
-.asset-name { font-weight: bold; color: var(--text); }
-.asset-description { color: var(--muted); font-size: 12px; }
+    .metric-note {
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-.crypto-item {
-  background: #0f1e17;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  padding: 17px;
-  min-width: 0;
-}
+    .positive { color: var(--positive) !important; }
+    .negative { color: var(--negative) !important; }
+    .muted { color: var(--muted); }
 
-.crypto-icon {
-  color: var(--accent);
-  font-size: 23px;
-  margin-bottom: 8px;
-}
+    .section {
+      margin-top: 20px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      animation: appear .5s ease both;
+    }
 
-.crypto-price {
-  font-size: clamp(21px, 4vw, 27px);
-  font-weight: bold;
-  color: var(--accent-light);
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-}
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
 
-.positive { color: var(--positive); }
-.negative { color: var(--negative); }
+    .section-heading p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-.badge {
-  display: inline-block;
-  background: #263c2e;
-  color: var(--accent-light);
-  border: 1px solid #42583f;
-  border-radius: 8px;
-  padding: 5px 8px;
-  font-size: 11px;
-}
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-footer { padding: 8px 0 20px; }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #b7c2bb;
+    }
 
-footer a {
-  color: var(--accent-light);
-  text-decoration: none;
-  font-weight: bold;
-}
+    .dot.ok { background: var(--positive); }
+    .dot.error { background: var(--negative); }
 
-footer a:hover { text-decoration: underline; }
-.source-row { margin: 12px 0; }
+    .table-wrap { overflow-x: auto; }
 
-@media (max-width: 520px) {
-  body { padding: 12px; }
-  .card { padding: 15px; border-radius: 14px; }
-  th, td { padding: 11px 7px; }
-  td { font-size: 13px; }
-}
-</style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    th {
+      padding: 12px 14px;
+      background: #f7faf8;
+      color: var(--muted);
+      text-align: right;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    td {
+      padding: 15px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+    }
+
+    th:first-child, td:first-child { text-align: left; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    tbody tr { transition: background .2s ease; }
+    tbody tr:hover { background: #f8fbf9; }
+
+    .asset {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .asset-icon {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .asset-name { font-weight: 750; }
+    .asset-type { color: var(--muted); font-size: 11px; }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .chart-card h3 { margin-bottom: 14px; }
+
+    .chart-area {
+      position: relative;
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      max-width: 390px;
+      height: 220px;
+    }
+
+    .distribution-list {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .distribution-row {
+      display: grid;
+      grid-template-columns: minmax(60px, .8fr) 2fr auto;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .track {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #edf2ee;
+    }
+
+    .bar {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .6s ease;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+    }
+
+    .notice {
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: #f3f7f4;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    .message {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff8e8;
+      color: #795b17;
+      font-size: 12px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .message.show { display: block; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: calc(100% - 22px); padding-top: 22px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .grid { grid-template-columns: 1fr; gap: 11px; }
+      .card { padding: 17px; }
+      .metric-value { font-size: 27px; }
+      .section { padding: 15px; }
+      .charts { grid-template-columns: 1fr; }
+      .chart-area { min-height: 200px; }
+      canvas { height: 200px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<main>
+  <main class="container">
+    <header>
+      <div>
+        <div class="eyebrow">Panel personal</div>
+        <h1>Cartera de inversiones de Constanza</h1>
+        <p class="subtitle">Seguimiento de tus inversiones en un solo lugar.</p>
+      </div>
+      <div class="header-actions">
+        <button class="button" id="refreshButton" type="button">↻ Actualizar</button>
+        <a class="button primary" href="https://app.cocos.capital/" target="_blank" rel="noopener noreferrer">
+          Cocos Capital ↗
+        </a>
+      </div>
+    </header>
 
-<header>
-  <div class="logo">₿</div>
-  <div>
-    <h1>Cartera de inversiones de Constanza</h1>
-    <p class="subtitle">CEDEARs y Cripto · Cotizaciones de referencia</p>
-  </div>
-</header>
+    <section class="grid" aria-label="Resumen de cartera">
+      <article class="card">
+        <div class="metric-label">Valor actual calculado</div>
+        <strong class="metric-value" id="portfolioValue">—</strong>
+        <div class="metric-note">Solo activos con moneda y precio verificables</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Resultado estimado</div>
+        <strong class="metric-value" id="portfolioResult">—</strong>
+        <div class="metric-note" id="portfolioResultNote">Pendiente de validar los datos</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Cotizaciones</div>
+        <strong class="metric-value" id="quoteStatus">—</strong>
+        <div class="metric-note" id="lastUpdated">Esperando actualización</div>
+      </article>
+    </section>
 
-<div class="grid">
-  <section class="card summary-card">
-    <div class="label">Capital de referencia CEDEARs</div>
-    <div class="value" id="capital">Cargando...</div>
-    <p class="note">Costo registrado de las cuatro posiciones.</p>
-  </section>
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Mis activos</h2>
+          <p>Precios y posiciones registradas</p>
+        </div>
+        <span class="status"><span class="dot" id="statusDot"></span><span id="statusText">Conectando...</span></span>
+      </div>
 
-  <section class="card summary-card">
-    <div class="label">Objetivo</div>
-    <div class="value" id="objetivo">Cargando...</div>
-    <p class="note">Meta calculada sobre el capital de referencia.</p>
-  </section>
-</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Activo</th>
+              <th>Cantidad</th>
+              <th>Precio actual</th>
+              <th>Variación diaria</th>
+              <th>Valor actual</th>
+              <th>Resultado</th>
+            </tr>
+          </thead>
+          <tbody id="assetsTable">
+            <tr><td colspan="6" class="muted">Cargando cotizaciones...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="message" id="dataMessage"></div>
+      <div class="notice">
+        Los resultados se muestran únicamente cuando los datos permiten una comparación coherente.
+        Revisá los importes y las monedas antes de tomar decisiones.
+      </div>
+    </section>
 
-<section class="card">
-  <h2>Mis activos</h2>
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Distribución y evolución</h2>
+          <p>Visualización del valor de los activos disponibles</p>
+        </div>
+      </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Activo</th>
-          <th>Cantidad</th>
-          <th>Costo registrado</th>
-          <th>Cotización</th>
-        </tr>
-      </thead>
-      <tbody id="tabla"></tbody>
-    </table>
-  </div>
+      <div class="charts">
+        <article class="chart-card">
+          <h3>Distribución de la cartera</h3>
+          <div class="chart-area">
+            <div id="distribution" class="distribution-list">
+              <p class="muted">Esperando cotizaciones...</p>
+            </div>
+          </div>
+        </article>
+        <article class="chart-card">
+          <h3>Valor por activo</h3>
+          <div class="chart-area">
+            <canvas id="valueChart" aria-label="Gráfico del valor por activo"></canvas>
+          </div>
+          <div id="chartLegend" class="legend"></div>
+        </article>
+      </div>
 
-  <p class="note">
-    Los precios de los CEDEARs se muestran en pesos argentinos cuando
-    la fuente los entrega en ARS. BTC y ETH se muestran como referencia
-    en USDT; su fuente puede cotizar en USD, que no es exactamente lo mismo.
-  </p>
+      <div class="notice">
+        El gráfico de barras compara los valores actuales disponibles. Para mostrar una evolución
+        histórica real necesitaremos guardar una serie de registros a lo largo del tiempo.
+      </div>
+    </section>
 
-  <p id="estado" class="note" aria-live="polite">
-    Consultando cotizaciones...
-  </p>
-</section>
+    <footer>
+      <span>Dashboard personal · Datos de referencia</span>
+      <span>Última consulta: <span id="footerUpdated">—</span></span>
+    </footer>
+  </main>
 
-<section class="card">
-  <h2>Criptomonedas</h2>
+  <script>
+    "use strict";
 
-  <div class="grid">
-    <div class="crypto-item">
-      <div class="crypto-icon">₿</div>
-      <div class="label">Bitcoin (BTC/USDT)</div>
-      <div class="crypto-price" id="btc">Cargando...</div>
-      <p class="note" id="btc-cambio">Consultando variación...</p>
-    </div>
+    // Costos totales registrados de las posiciones.
+    // Se mantienen separados hasta verificar su moneda y la moneda de cotización.
+    const cartera = [
+      { symbol: "SPY", name: "SPY", type: "CEDEAR", quantity: 5, costTotal: 66.10, costCurrency: "USD" },
+      { symbol: "XPD", name: "XPD", type: "CEDEAR", quantity: 26, costTotal: 109.20, costCurrency: "USD" },
+      { symbol: "EWZD", name: "EWZD · Brasil", type: "CEDEAR", quantity: 17, costTotal: 303.72, costCurrency: "USD" },
+      { symbol: "NUD", name: "NUD", type: "CEDEAR", quantity: 7, costTotal: 46.20, costCurrency: "USD" },
+      { symbol: "BTCUSDT", name: "Bitcoin", type: "Cripto · referencia", quantity: 0, costTotal: null, costCurrency: "USD" },
+      { symbol: "ETHUSDT", name: "Ethereum", type: "Cripto · referencia", quantity: 0, costTotal: null, costCurrency: "USD" }
+    ];
 
-    <div class="crypto-item">
-      <div class="crypto-icon">Ξ</div>
-      <div class="label">Ethereum (ETH/USDT)</div>
-      <div class="crypto-price" id="eth">Cargando...</div>
-      <p class="note" id="eth-cambio">Consultando variación...</p>
-    </div>
-  </div>
+    const colores = ["#267653", "#72a78b", "#a8cbb7", "#d3e6da", "#8c9b91", "#d8b875"];
+    const monedaUSD = new Intl.NumberFormat("es-AR", {
+      style: "currency", currency: "USD", maximumFractionDigits: 2
+    });
+    const numero = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
 
-  <p class="note">
-    Las criptomonedas son cotizaciones de referencia; no se incluyen
-    en el capital de los CEDEARs ni en el objetivo.
-  </p>
-</section>
+    let ultimoDatos = null;
 
-<section class="card">
-  <h2>Detalle de la cartera</h2>
-  <p>SPY: 5 unidades · Costo de referencia US$ 66,10.</p>
-  <p>XP Inc. (XPD): 26 unidades · Costo US$ 109,20.</p>
-  <p>iShares ETF de Brasil (EWZD): 17 unidades · Costo US$ 303,72.</p>
-  <p>Nubank (NUD): 7 unidades · Costo US$ 46,20.</p>
-
-  <p class="note">
-    Las cantidades de BTC y ETH todavía no están registradas.
-    Por eso se muestran sus precios, no el valor de una posición propia.
-  </p>
-</section>
-
-<footer>
-  <section class="card">
-    <h2>Fuentes de información</h2>
-
-    <p class="note">
-      Cotizaciones de referencia. Los precios pueden presentar
-      demoras y diferencias respecto de los valores operados.
-    </p>
-
-    <p class="source-row">
-      <strong>CEDEARs:</strong><br>
-      <a href="https://app.cocos.capital/"
-         target="_blank"
-         rel="noopener noreferrer">
-        Cocos Capital · Acceder a mis inversiones ↗
-      </a>
-    </p>
-
-    <p class="source-row">
-      <strong>Bitcoin y Ethereum:</strong><br>
-      <a href="https://www.coingecko.com/"
-         target="_blank"
-         rel="noopener noreferrer">
-        CoinGecko ↗
-      </a>
-    </p>
-
-    <p class="note">
-      Dashboard personal de inversiones.<br>
-      Datos informativos; no constituyen asesoramiento financiero.
-    </p>
-  </section>
-</footer>
-
-</main>
-
-<script>
-const cartera = [
-  {
-    simbolo: "SPY",
-    nombre: "SPDR S&P 500",
-    cantidad: 5,
-    costo: 66.10,
-    moneda: "USD"
-  },
-  {
-    simbolo: "XPD",
-    nombre: "XP Inc.",
-    cantidad: 26,
-    costo: 109.20,
-    moneda: "ARS"
-  },
-  {
-    simbolo: "EWZD",
-    nombre: "iShares MSCI Brasil ETF",
-    cantidad: 17,
-    costo: 303.72,
-    moneda: "ARS"
-  },
-  {
-    simbolo: "NUD",
-    nombre: "Nubank",
-    cantidad: 7,
-    costo: 46.20,
-    moneda: "ARS"
-  },
-  {
-    simbolo: "BTCUSDT",
-    nombre: "Bitcoin",
-    cantidad: "—",
-    costo: null,
-    moneda: "USDT"
-  },
-  {
-    simbolo: "ETHUSDT",
-    nombre: "Ethereum",
-    cantidad: "—",
-    costo: null,
-    moneda: "USDT"
-  }
-];
-
-const formato = (n, moneda) => {
-  if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) {
-    return "Pendiente";
-  }
-
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: moneda === "ARS" ? "ARS" : "USD",
-    maximumFractionDigits: 2
-  }).format(n);
-};
-
-const capital = cartera
-  .filter(a => a.costo !== null)
-  .reduce((s, a) => s + a.costo, 0);
-
-document.getElementById("capital").textContent =
-  formato(capital, "USD");
-
-document.getElementById("objetivo").textContent =
-  formato(capital * 2, "USD");
-
-async function actualizar() {
-  const estado = document.getElementById("estado");
-
-  try {
-    const respuesta = await fetch(
-      "./cotizaciones.json?t=" + Date.now(),
-      { cache: "no-store" }
-    );
-
-    if (!respuesta.ok) {
-      throw new Error("No se pudo leer cotizaciones.json");
+    function formatoUSD(valor) {
+      return Number.isFinite(valor) ? monedaUSD.format(valor) : "—";
     }
 
-    const datos = await respuesta.json();
+    function formatoPrecio(valor, currency) {
+      if (!Number.isFinite(valor)) return "Sin dato";
+      if (currency === "USD") return formatoUSD(valor);
+      if (currency === "ARS") {
+        return new Intl.NumberFormat("es-AR", {
+          style: "currency", currency: "ARS", maximumFractionDigits: 2
+        }).format(valor);
+      }
+      return numero.format(valor);
+    }
 
-    document.getElementById("tabla").innerHTML =
-      cartera.map(a => {
-        const cot = datos[a.simbolo];
+    function numeroValido(value) {
+      if (typeof value === "number") return Number.isFinite(value) ? value : null;
+      if (typeof value === "string" && value.trim() !== "") {
+        const parsed = Number(value.replace(",", "."));
+        return Number.isFinite(parsed) ? parsed : null;
+      }
+      return null;
+    }
 
-        const precio = cot && Number(cot.precio) > 0
-          ? Number(cot.precio)
-          : null;
+    // Acepta formatos comunes, pero el esquema real de cotizaciones.json
+    // debe comprobarse para confirmar la moneda de cada símbolo.
+    function extraerCotizacion(raw) {
+      if (typeof raw === "number" || typeof raw === "string") {
+        const precio = numeroValido(raw);
+        return { precio, moneda: null, variacion: null };
+      }
 
-        let moneda = a.moneda;
+      if (!raw || typeof raw !== "object") {
+        return { precio: null, moneda: null, variacion: null };
+      }
 
-        if (a.simbolo === "SPY") moneda = "USD";
+      const precio = numeroValido(
+        raw.precio ?? raw.price ?? raw.last ?? raw.close ??
+        raw.cotizacion ?? raw.ultimo ?? raw.value
+      );
 
-        if (
-          a.simbolo === "BTCUSDT" ||
-          a.simbolo === "ETHUSDT"
-        ) {
-          moneda = "USDT";
+      const variacion = numeroValido(
+        raw.variacion_24h_pct ?? raw.variacion_pct ??
+        raw.change_percent ?? raw.changePercent ?? raw.porcentaje
+      );
+
+      const moneda = String(
+        raw.moneda ?? raw.currency ?? raw.divisa ?? ""
+      ).toUpperCase();
+
+      return {
+        precio,
+        moneda: ["USD", "ARS"].includes(moneda) ? moneda : null,
+        variacion
+      };
+    }
+
+    function obtenerRegistro(datos, symbol) {
+      if (!datos || typeof datos !== "object") return null;
+
+      const claves = {
+        SPY: ["SPY", "SPY.BA"],
+        XPD: ["XPD"],
+        EWZD: ["EWZD"],
+        NUD: ["NUD"],
+        BTCUSDT: ["BTCUSDT", "BTC"],
+        ETHUSDT: ["ETHUSDT", "ETH"]
+      }[symbol] || [symbol];
+
+      for (const clave of claves) {
+        if (datos[clave] !== undefined) return datos[clave];
+      }
+
+      if (datos.cotizaciones && typeof datos.cotizaciones === "object") {
+        for (const clave of claves) {
+          if (datos.cotizaciones[clave] !== undefined) return datos.cotizaciones[clave];
+        }
+      }
+
+      return null;
+    }
+
+    function dibujarDistribucion(activos) {
+      const contenedor = document.getElementById("distribution");
+      const validos = activos.filter(a => a.valorUSD !== null && a.valorUSD > 0);
+      const total = validos.reduce((sum, a) => sum + a.valorUSD, 0);
+
+      if (!validos.length || total <= 0) {
+        contenedor.innerHTML = '<p class="muted">No hay valores comparables en USD para mostrar.</p>';
+        return;
+      }
+
+      contenedor.innerHTML = validos.map(a => {
+        const porcentaje = a.valorUSD / total * 100;
+        return `
+          <div class="distribution-row">
+            <span>${a.symbol}</span>
+            <div class="track"><div class="bar" style="width:${porcentaje}%;background:${colores[cartera.findIndex(c => c.symbol === a.symbol) % colores.length]}"></div></div>
+            <strong>${porcentaje.toFixed(1)}%</strong>
+          </div>`;
+      }).join("");
+    }
+
+    function dibujarGrafico(activos) {
+      const canvas = document.getElementById("valueChart");
+      const ctx = canvas.getContext("2d");
+      const validos = activos.filter(a => a.valorUSD !== null && a.valorUSD > 0);
+      const legend = document.getElementById("chartLegend");
+
+      const ratio = window.devicePixelRatio || 1;
+      const width = canvas.clientWidth || 320;
+      const height = 220;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+
+      if (!validos.length) {
+        ctx.fillStyle = "#718078";
+        ctx.font = "13px sans-serif";
+        ctx.fillText("Sin valores comparables", 12, 105);
+        legend.innerHTML = "";
+        return;
+      }
+
+      const max = Math.max(...validos.map(a => a.valorUSD));
+      const padding = { left: 12, right: 12, top: 12, bottom: 42 };
+      const usableW = width - padding.left - padding.right;
+      const usableH = height - padding.top - padding.bottom;
+      const slot = usableW / validos.length;
+      const barW = Math.min(42, slot * .55);
+
+      ctx.strokeStyle = "#e3eae5";
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 4; i++) {
+        const y = padding.top + usableH * i / 3;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+      }
+
+      validos.forEach((a, i) => {
+        const barH = max > 0 ? (a.valorUSD / max) * usableH : 0;
+        const x = padding.left + slot * i + (slot - barW) / 2;
+        const y = padding.top + usableH - barH;
+
+        ctx.fillStyle = colores[cartera.findIndex(c => c.symbol === a.symbol) % colores.length];
+        ctx.beginPath();
+        ctx.roundRect(x, y, barW, Math.max(0, barH), 5);
+        ctx.fill();
+
+        ctx.fillStyle = "#526158";
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(a.symbol, x + barW / 2, height - 19);
+      });
+
+      legend.innerHTML = validos.map(a => {
+        const color = colores[cartera.findIndex(c => c.symbol === a.symbol) % colores.length];
+        return `<span class="legend-item"><span class="legend-dot" style="background:${color}"></span>${a.symbol}: ${formatoUSD(a.valorUSD)}</span>`;
+      }).join("");
+    }
+
+    function renderizar(datos) {
+      const activos = cartera.map(c => {
+        const raw = obtenerRegistro(datos, c.symbol);
+        const q = extraerCotizacion(raw);
+        const moneda = q.moneda;
+        let valorUSD = null;
+        let resultadoUSD = null;
+
+        // Solo se calcula el valor en USD si el archivo identifica la moneda.
+        if (Number.isFinite(q.precio) && moneda === "USD" && c.quantity > 0) {
+          valorUSD = q.precio * c.quantity;
         }
 
-        const cotizacion = precio === null
-          ? "Pendiente"
-          : moneda === "ARS"
-            ? formato(precio, "ARS")
-            : "US$ " + precio.toLocaleString("es-AR", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              }) + (moneda === "USDT" ? " USDT" : "");
+        // Compara solo si el costo está expresado en USD y la cotización también.
+        if (valorUSD !== null && Number.isFinite(c.costTotal)) {
+          resultadoUSD = valorUSD - c.costTotal;
+        }
+
+        return {
+          ...c,
+          precio: q.precio,
+          moneda,
+          variacion: q.variacion,
+          valorUSD,
+          resultadoUSD
+        };
+      });
+
+      const conValor = activos.filter(a => a.valorUSD !== null);
+      const totalUSD = conValor.reduce((s, a) => s + a.valorUSD, 0);
+      const resultados = activos.filter(a => a.resultadoUSD !== null);
+      const resultadoTotal = resultados.reduce((s, a) => s + a.resultadoUSD, 0);
+
+      document.getElementById("portfolioValue").textContent =
+        conValor.length ? formatoUSD(totalUSD) : "Pendiente";
+      document.getElementById("portfolioResult").textContent =
+        resultados.length ? formatoUSD(resultadoTotal) : "Pendiente";
+      document.getElementById("portfolioResult").className =
+        "metric-value " + (resultadoTotal >= 0 ? "positive" : "negative");
+      document.getElementById("portfolioResultNote").textContent =
+        resultados.length
+          ? "Estimación sobre activos con precio y moneda USD identificados"
+          : "Necesitamos verificar las monedas de las cotizaciones";
+
+      const tbody = document.getElementById("assetsTable");
+      tbody.innerHTML = activos.map(a => {
+        const idx = cartera.findIndex(c => c.symbol === a.symbol);
+        const precio = a.precio === null ? "Sin dato" : formatoPrecio(a.precio, a.moneda);
+        const variacion = a.variacion === null
+          ? "—"
+          : `${a.variacion > 0 ? "+" : ""}${a.variacion.toFixed(2)}%`;
+        const variacionClass = a.variacion === null ? "muted" : (a.variacion >= 0 ? "positive" : "negative");
+        const valor = a.valorUSD === null ? "—" : formatoUSD(a.valorUSD);
+        const resultado = a.resultadoUSD === null ? "—" : formatoUSD(a.resultadoUSD);
+        const resultadoClass = a.resultadoUSD === null ? "muted" : (a.resultadoUSD >= 0 ? "positive" : "negative");
 
         return `<tr>
-          <td>
-            <span class="asset-name">${a.simbolo}</span><br>
-            <span class="asset-description">${a.nombre}</span>
-          </td>
-          <td>${a.cantidad}</td>
-          <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
-          <td>${cotizacion}</td>
+          <td><div class="asset">
+            <div class="asset-icon">${a.symbol.slice(0, 3)}</div>
+            <div><div class="asset-name">${a.name}</div><div class="asset-type">${a.type}</div></div>
+          </div></td>
+          <td>${a.quantity > 0 ? a.quantity : "Referencia"}</td>
+          <td>${precio}</td>
+          <td class="${variacionClass}">${variacion}</td>
+          <td>${valor}</td>
+          <td class="${resultadoClass}">${resultado}</td>
         </tr>`;
       }).join("");
 
-    mostrarCrypto(datos, "BTCUSDT", "btc", "btc-cambio");
-    mostrarCrypto(datos, "ETHUSDT", "eth", "eth-cambio");
+      dibujarDistribucion(activos);
+      dibujarGrafico(activos);
 
-    const faltantes = cartera.filter(a =>
-      !datos[a.simbolo] ||
-      !(Number(datos[a.simbolo].precio) > 0)
-    );
+      const conPrecio = activos.filter(a => a.precio !== null).length;
+      document.getElementById("quoteStatus").textContent = `${conPrecio}/${activos.length}`;
+      document.getElementById("lastUpdated").textContent =
+        "Consulta: " + new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
 
-    estado.textContent = faltantes.length
-      ? "Sin cotización válida para: " +
-        faltantes.map(a => a.simbolo).join(", ") +
-        ". Se mostrarán cuando haya datos disponibles."
-      : "Cotizaciones cargadas desde cotizaciones.json.";
+      const updated = new Date().toLocaleString("es-AR");
+      document.getElementById("footerUpdated").textContent = updated;
+      document.getElementById("statusDot").className = "dot " + (conPrecio ? "ok" : "error");
+      document.getElementById("statusText").textContent =
+        conPrecio ? "Archivo leído" : "Sin cotizaciones";
 
-  } catch (e) {
-    estado.textContent =
-      "No se pudieron cargar las cotizaciones. Revisá cotizaciones.json.";
+      const missingCurrency = activos.some(a => a.precio !== null && !a.moneda);
+      const message = document.getElementById("dataMessage");
+      if (missingCurrency) {
+        message.textContent =
+          "Las cotizaciones están disponibles, pero el archivo no identifica la moneda para todos los precios. Por seguridad, el valor total y los resultados se calculan solo con precios identificados en USD.";
+        message.classList.add("show");
+      } else {
+        message.textContent = "";
+        message.classList.remove("show");
+      }
+    }
 
-    document.getElementById("tabla").innerHTML =
-      cartera.map(a => `
-        <tr>
-          <td>
-            <span class="asset-name">${a.simbolo}</span><br>
-            <span class="asset-description">${a.nombre}</span>
-          </td>
-          <td>${a.cantidad}</td>
-          <td>${a.costo === null ? "—" : formato(a.costo, "USD")}</td>
-          <td>Pendiente</td>
-        </tr>
-      `).join("");
+    async function actualizar() {
+      const button = document.getElementById("refreshButton");
+      button.disabled = true;
+      button.textContent = "Actualizando…";
 
-    console.error(e);
-  }
-}
+      try {
+        const response = await fetch("./cotizaciones.json?t=" + Date.now(), {
+          cache: "no-store"
+        });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const datos = await response.json();
+        ultimoDatos = datos;
+        renderizar(datos);
+      } catch (error) {
+        document.getElementById("statusDot").className = "dot error";
+        document.getElementById("statusText").textContent = "Error de conexión";
+        document.getElementById("assetsTable").innerHTML =
+          '<tr><td colspan="6">No se pudo leer cotizaciones.json. Comprobá que el archivo esté publicado.</td></tr>';
+        document.getElementById("dataMessage").textContent =
+          "Error al cargar los datos: " + error.message;
+        document.getElementById("dataMessage").classList.add("show");
+      } finally {
+        button.disabled = false;
+        button.textContent = "↻ Actualizar";
+      }
+    }
 
-function mostrarCrypto(datos, simbolo, idPrecio, idCambio) {
-  const cot = datos[simbolo];
-  const precio = Number(cot?.precio);
+    document.getElementById("refreshButton").addEventListener("click", actualizar);
 
-  document.getElementById(idPrecio).textContent =
-    Number.isFinite(precio) && precio > 0
-      ? "US$ " + precio.toLocaleString("es-AR", {
-          maximumFractionDigits: 2
-        })
-      : "Pendiente";
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (ultimoDatos) renderizar(ultimoDatos);
+      }, 150);
+    });
 
-  const variacion = Number(cot?.variacion_24h_pct);
-  const elemento = document.getElementById(idCambio);
-
-  if (Number.isFinite(variacion)) {
-    elemento.textContent =
-      (variacion > 0 ? "+" : "") +
-      variacion.toFixed(2) +
-      "% en 24 h";
-
-    elemento.className = "note " +
-      (variacion > 0
-        ? "positive"
-        : variacion < 0
-          ? "negative"
-          : "");
-  } else {
-    elemento.textContent = "Variación no disponible";
-    elemento.className = "note";
-  }
-}
-
-actualizar();
-</script>
-
+    actualizar();
+  </script>
 </body>
 </html>
