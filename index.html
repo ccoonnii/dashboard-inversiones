@@ -539,6 +539,154 @@
           : "Variación diaria no disponible";
     }
 
+    async function cargarHistorial() {
+      const estado = document.getElementById("estado-historial");
+      const grafico = document.getElementById("grafico-historial");
+      const detalle = document.getElementById("detalle-historial");
+
+      try {
+        const respuesta = await fetch(
+          `./historial.json?t=${Date.now()}`,
+          { cache: "no-store" }
+        );
+
+        if (!respuesta.ok) {
+          throw new Error("No se pudo leer historial.json");
+        }
+
+        const historial = await respuesta.json();
+
+        if (!Array.isArray(historial) || historial.length === 0) {
+          estado.textContent = "Todavía no hay registros históricos.";
+          return;
+        }
+
+        const simbolos = ["SPY", "XPD", "EWZD", "NUD"];
+        const colores = ["#24734d", "#3678b7", "#b7791f", "#8b5fbf"];
+
+        const registros = historial
+          .filter(r => r && r.fecha && r.cotizaciones)
+          .sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+        if (registros.length === 0) {
+          estado.textContent = "No hay registros válidos para graficar.";
+          return;
+        }
+
+        const series = simbolos.map((simbolo, indice) => ({
+          simbolo,
+          color: colores[indice],
+          puntos: registros
+            .map(r => ({
+              fecha: r.fecha,
+              precio: Number(r.cotizaciones[simbolo])
+            }))
+            .filter(p => Number.isFinite(p.precio) && p.precio > 0)
+        })).filter(s => s.puntos.length > 0);
+
+        if (series.length === 0) {
+          estado.textContent =
+            "El historial no contiene precios válidos de los activos de tu cartera.";
+          return;
+        }
+
+        const ancho = 700;
+        const alto = 260;
+        const margen = { arriba: 20, derecha: 20, abajo: 45, izquierda: 65 };
+        const anchoUtil = ancho - margen.izquierda - margen.derecha;
+        const altoUtil = alto - margen.arriba - margen.abajo;
+
+        const todos = series.flatMap(s => s.puntos);
+        const minimo = Math.min(...todos.map(p => p.precio));
+        const maximo = Math.max(...todos.map(p => p.precio));
+        const rango = maximo - minimo || 1;
+
+        const fechas = [...new Set(todos.map(p => p.fecha))].sort();
+        const x = fecha => fechas.length === 1
+          ? margen.izquierda + anchoUtil / 2
+          : margen.izquierda +
+            fechas.indexOf(fecha) / (fechas.length - 1) * anchoUtil;
+
+        const y = valor =>
+          margen.arriba + (maximo - valor) / rango * altoUtil;
+
+        const partes = [];
+
+        for (let i = 0; i <= 4; i++) {
+          const valor = minimo + rango * i / 4;
+          const yy = y(valor);
+
+          partes.push(
+            `<line x1="${margen.izquierda}" y1="${yy}" ` +
+            `x2="${ancho - margen.derecha}" y2="${yy}" ` +
+            `stroke="#e5eae3" stroke-width="1"/>`
+          );
+
+          partes.push(
+            `<text x="${margen.izquierda - 8}" y="${yy + 4}" ` +
+            `text-anchor="end" font-size="11" fill="#69746b">` +
+            `${valor.toLocaleString("es-AR", {
+              maximumFractionDigits: 2
+            })}</text>`
+          );
+        }
+
+        for (const serie of series) {
+          const puntos = serie.puntos.map(p =>
+            `${x(p.fecha)},${y(p.precio)}`
+          ).join(" ");
+
+          partes.push(
+            `<polyline points="${puntos}" fill="none" ` +
+            `stroke="${serie.color}" stroke-width="2.5" ` +
+            `stroke-linejoin="round" stroke-linecap="round"/>`
+          );
+
+          for (const p of serie.puntos) {
+            partes.push(
+              `<circle cx="${x(p.fecha)}" cy="${y(p.precio)}" ` +
+              `r="3.5" fill="${serie.color}"/>`
+            );
+          }
+        }
+
+        if (fechas.length === 1) {
+          partes.push(
+            `<text x="${ancho / 2}" y="${alto - 12}" ` +
+            `text-anchor="middle" font-size="12" fill="#69746b">` +
+            `${fechas[0]}</text>`
+          );
+        } else {
+          partes.push(
+            `<text x="${margen.izquierda}" y="${alto - 12}" ` +
+            `font-size="12" fill="#69746b">${fechas[0]}</text>`
+          );
+          partes.push(
+            `<text x="${ancho - margen.derecha}" y="${alto - 12}" ` +
+            `text-anchor="end" font-size="12" fill="#69746b">` +
+            `${fechas[fechas.length - 1]}</text>`
+          );
+        }
+
+        grafico.innerHTML = partes.join("");
+        grafico.style.display = "block";
+
+        detalle.innerHTML = series.map(s =>
+          `<span style="display:inline-block; margin:4px 12px 4px 0;">` +
+          `<span style="color:${s.color}">●</span> ` +
+          `${s.simbolo}</span>`
+        ).join("");
+
+        estado.textContent =
+          `Registros guardados: ${registros.length} · ` +
+          `Desde ${fechas[0]} hasta ${fechas[fechas.length - 1]}.`;
+      } catch (error) {
+        console.error("Error al cargar el historial:", error);
+        estado.textContent =
+          "No se pudo cargar el historial. Verificá historial.json.";
+      }
+    }
+
     async function cargarCotizaciones() {
       const boton = document.getElementById("actualizar");
       const estado = document.getElementById("estado");
