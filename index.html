@@ -147,6 +147,27 @@
       <div id="estado" class="estado" role="status" aria-live="polite">Preparando actualización…</div>
     </section>
 
+    <section class="seccion panel" id="seccion-historial">
+      <div class="encabezado-seccion">
+        <div>
+          <h2>Evolución histórica</h2>
+          <p>Seguimiento diario de las cotizaciones guardadas</p>
+        </div>
+      </div>
+      <div id="estado-historial" class="estado" role="status">
+        Cargando historial…
+      </div>
+      <div style="width:100%; overflow-x:auto;">
+        <svg id="grafico-historial"
+             viewBox="0 0 700 260"
+             role="img"
+             aria-label="Gráfico de evolución histórica de las cotizaciones"
+             style="display:none; width:100%; min-width:320px; height:auto;">
+        </svg>
+      </div>
+      <div id="detalle-historial" class="detalle"></div>
+    </section>
+
     <section class="seccion">
       <div class="encabezado-seccion">
         <div><h2>Mercado cripto</h2><p>Precios de referencia; no se suman a tu cartera</p></div>
