@@ -3,15 +3,26 @@
     "fecha": "2026-10-26",
     "cotizaciones": {
       "SPY": 13.22,
-      "XPD": 4.20,
+      "XPD": 4.2,
       "EWZD": 17.866,
-      "NUD": 6.60
+      "NUD": 6.6
     }
   },
   {
     "fecha": "2026-10-29",
     "cotizaciones": {
       "SPY": 13.7516,
+      "XPD": 3.97,
+      "EWZD": 17.41,
+      "NUD": 6.4
+    }
+  },
+  {
+    "fecha": "2026-10-30",
+    "cotizaciones": {
+      "SPY": 13.7646,
+      "BTCUSDT": 78598.0,
+      "ETHUSDT": 2255.43,
       "XPD": 3.97,
       "EWZD": 17.41,
       "NUD": 6.4
