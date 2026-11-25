@@ -1,38 +1,38 @@
 {
   "SPY": {
-    "precio": 13.5678,
-    "precio_ars": 21600.0,
-    "tipo_cambio_ars_por_usd": 1592.0,
-    "actualizado": "2026-11-24T22:28:06.000410+00:00"
+    "precio": 13.3146,
+    "precio_ars": 21330.0,
+    "tipo_cambio_ars_por_usd": 1602.0,
+    "actualizado": "2026-11-25T22:27:26.969077+00:00"
   },
   "BTCUSDT": {
-    "precio": 59931.0,
-    "variacion_24h_pct": -2.057882142344166,
+    "precio": 59983.0,
+    "variacion_24h_pct": 0.09602969679609959,
     "fuente": "CoinGecko",
-    "actualizado": "2026-11-24T22:28:06.258000+00:00"
+    "actualizado": "2026-11-25T22:27:28.219469+00:00"
   },
   "ETHUSDT": {
-    "precio": 1682.25,
-    "variacion_24h_pct": -1.905056387587313,
+    "precio": 1680.64,
+    "variacion_24h_pct": -0.09148845707835913,
     "fuente": "CoinGecko",
-    "actualizado": "2026-11-24T22:28:06.258000+00:00"
+    "actualizado": "2026-11-25T22:27:28.219469+00:00"
   },
   "XPD": {
-    "precio": 3.65,
-    "precio_ars": 3.65,
+    "precio": 3.79,
+    "precio_ars": 3.79,
     "fuente": "Data912",
-    "actualizado": "2026-11-24T22:28:06.166200+00:00"
+    "actualizado": "2026-11-25T22:27:28.031842+00:00"
   },
   "EWZD": {
-    "precio": 15.61,
-    "precio_ars": 15.61,
+    "precio": 16.1,
+    "precio_ars": 16.1,
     "fuente": "Data912",
-    "actualizado": "2026-11-24T22:28:06.166049+00:00"
+    "actualizado": "2026-11-25T22:27:28.031622+00:00"
   },
   "NUD": {
-    "precio": 6.27,
-    "precio_ars": 6.27,
+    "precio": 6.59,
+    "precio_ars": 6.59,
     "fuente": "Data912",
-    "actualizado": "2026-11-24T22:28:06.166124+00:00"
+    "actualizado": "2026-11-25T22:27:28.031730+00:00"
   }
 }
